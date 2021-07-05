@@ -12,11 +12,13 @@ public interface DBConnection {
 	
 	public user searchUser(String username);
 	
+
+	
 	public boolean verifyLogin(String username, String password);
 	
-	public boolean insertUser(String username,String password,String attributes, String firstname, String lastname);
+	public boolean insertUser(user us);
 
-	public boolean insertMission(String missionName, String missionCode, String endTime, int capacity, String masterKeys, String publicKeys);
+	public boolean insertMission(mission ms);
 
 	public mission searchMission(String missionName);
 	

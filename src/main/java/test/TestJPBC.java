@@ -2,9 +2,13 @@ package test;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import db.DBConnection;
+import db.DBConnectionFactory;
+import entity.mission;
 import it.unisa.dia.gas.jpbc.*;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 //import java.lang.Math.*;
@@ -34,6 +38,20 @@ public class TestJPBC {
 		PublicKey pk = testABE.getPublicKey();
 		System.out.println(pk);
 		pk.printPublicKey();
+		
+		byte myb[];
+		myb=pairing.getG1().newRandomElement().toBytes();
+		System.out.println(myb.length);
+		
+		mission testMission=new mission("Super mission", 1000);
+		testMission.setupKeysFromReVo(testABE);
+		Timestamp tp = new Timestamp(System.currentTimeMillis()+100000000);
+		testMission.setEndTime(tp);
+		DBConnection connection = DBConnectionFactory.getConnection();
+		connection.insertMission(testMission);
+		
+		
+		
 		
 	}
 

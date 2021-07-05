@@ -82,21 +82,34 @@ public class MySQLConnection implements DBConnection{
 		}
 		
 		return null;
-		
 	}
+	
+	
+	
 
 	@Override
-	public boolean insertUser(String username, String password, String attributes, String firstname, String lastname) {
+	public boolean insertUser(user us) {
 		
 
 		String sql = "INSERT INTO user (username,password,attributes,firstname,lastname)"
-				+ "VALUES ('"+username+"','"+password+"','"+attributes+"','"+firstname+"','"+lastname+"');";
+				+ "VALUES (?,?,?,?,?);";
 		try {
-			Statement stmt = conn.createStatement();
-			user curUser = searchUser(username);
+			
+			user curUser = searchUser(us.getUsername());
 			if(curUser == null) {
-				stmt.executeUpdate(sql);
+				PreparedStatement stmt = conn.prepareStatement(sql);
+				stmt.setString(1, us.getUsername());
+				stmt.setString(2, us.getPassword());
+				stmt.setString(3, us.getAttributes());
+				stmt.setString(4, us.getFirstname());
+				stmt.setString(5, us.getLastname());
+				stmt.executeUpdate();
 				return true;
+			}
+			else {
+				
+				System.out.println("User already exisits");
+				return false;
 			}
 
 		} catch (SQLException e) {
@@ -108,17 +121,33 @@ public class MySQLConnection implements DBConnection{
 	}
 
 	@Override
-	public boolean insertMission(String missionName, String missionCode, String endTime, int capacity,
-			String masterKeys, String publicKeys) {
+	public boolean insertMission(mission ms) {
 		// TODO Auto-generated method stub
-		String sql = "INSERT INTO mission (missionName,missionCode,endTime,capacity,masterKeys,publicKeys)"
-				+ "VALUES ('"+missionName+"','"+missionCode+"','"+endTime+"',"+capacity+",'"+masterKeys+"','"+publicKeys+"');";
+		String sql = "INSERT INTO mission (missionName,missionCode,endTime,capacity,g1_alpha,beta,g1,g2,g2_beta,e_gg_alpha,g1_a)"
+				+ "VALUES (?,?,?,?,?,?,?,?,?,?,?);";
 		try {
-			System.out.println(sql);
-			Statement stmt = conn.createStatement();
-
-			stmt.executeUpdate(sql);
-			return true;
+			mission curMission1 = searchMission(ms.getMissionName());
+			mission curMission2 = searchMissionByCode(ms.getMissionCode());
+			if(curMission1 == null && curMission2 == null) {
+				PreparedStatement stmt = conn.prepareStatement(sql);
+				stmt.setString(1, ms.getMissionName());
+				stmt.setString(2, ms.getMissionCode());
+				stmt.setTimestamp(3, ms.getEndTime());
+				stmt.setInt(4, ms.getCapacity());
+				stmt.setBytes(5, ms.getG1_alpha());
+				stmt.setBytes(6, ms.getBeta());
+				stmt.setBytes(7, ms.getG1());
+				stmt.setBytes(8, ms.getG2());
+				stmt.setBytes(9, ms.getG2_beta());
+				stmt.setBytes(10, ms.getE_gg_alpha());
+				stmt.setBytes(11, ms.getG1a());
+				stmt.executeUpdate();
+				return true;
+			}
+			else {
+				System.out.println("Mission already exisits");
+				return false;
+			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

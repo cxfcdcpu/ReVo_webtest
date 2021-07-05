@@ -1,17 +1,21 @@
 package test;
 import db.*;
 import db.mysql.*;
+import entity.user;
 public class TestDB {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		DBConnection connection = DBConnectionFactory.getConnection();
-		if(connection.insertUser("dummy1", "1234", "dummy", "mm", "dd")) {
-			System.out.println("insert successfully");
-		}
-		else {
-			System.out.println("Fail to insert");
-		}
+
+		user dummyUser=new user("DummyUser0","1234");
+		dummyUser.addAttributes("Captain");
+		dummyUser.addAttributes("District 1");
+		dummyUser.addAttributes("Connector");
+		dummyUser.setFirstname("Dummy");
+		dummyUser.setLastname("User");
+		
+		connection.insertUser(dummyUser);
 	}
 
 }

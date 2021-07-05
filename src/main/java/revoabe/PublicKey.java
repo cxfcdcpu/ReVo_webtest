@@ -31,11 +31,22 @@ public class PublicKey{
 		System.out.println("g1_a: "+g1_a.toString());
 	}
 	
-	public String toSring() {
-		
-		
-		return null;
+	public byte[] getG1() {
+		return g1.toBytes();
 	}
 	
+	public byte[] getG2() {
+		return g2.toBytes();
+	}
+	public byte[] getG1a() {
+		return g1_a.toBytes();
+	}
+	public byte[] getG2_beta() {
+		return g2_beta.toBytes();
+	}
+	public byte[] getE_gg_alpha() {
+		return e_gg_alpha.toBytes();
+	}
+
 	
 }

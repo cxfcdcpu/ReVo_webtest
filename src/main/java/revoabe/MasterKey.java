@@ -16,4 +16,12 @@ public class MasterKey{
 		System.out.println("beta: "+beta.toString());
 	}
 	
+	public byte[] getG1_alpha() {
+		return g1_alpha.toBytes();
+	}
+	
+	public byte[] getBeta() {
+		return beta.toBytes();
+	}
+	
 }

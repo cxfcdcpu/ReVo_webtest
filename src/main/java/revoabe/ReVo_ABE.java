@@ -76,6 +76,11 @@ public class ReVo_ABE {
 		return new PrivateKey(attr_list,K_i,L,K_y);
 	}
 	
+	public int getNodeCount() {
+		return nodeCount;
+	}
+	
+
 
 	
 }
