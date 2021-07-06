@@ -2,6 +2,7 @@ package rpc;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -49,30 +50,30 @@ public class Bootstrap extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-
-		JSONObject output= new JSONObject();
+		OutputStream os = response.getOutputStream();
+		DBConnection conn = DBConnectionFactory.getConnection();
 		try {
-			JSONObject input = RpcHelper.readJsonObject(request);
-			String username = input.getString("username");
-			String password = input.getString("password");
-			String missionCode = input.getString("missionCode");
-			DBConnection conn = DBConnectionFactory.getConnection();
-			mission curMission = conn.searchMissionByCode(missionCode);
-			if (conn.verifyLogin(username, password) && curMission !=null) {
-				output.put("publicKey", RpcHelper.dummyPublicKey());
-				output.put("privateKey", RpcHelper.dummyPrivateKey());
-				RpcHelper.writeJsonObject(response, output);
-
-			}
-			
-			
-			conn.close();
-			
+				JSONObject input = RpcHelper.readJsonObject(request);
+				String username = input.getString("username");
+				String password = input.getString("password");
+				String missionCode = input.getString("missionCode");
+				
+				mission curMission = conn.searchMissionByCode(missionCode);
+				if (conn.verifyLogin(username, password) && curMission !=null) {
+					response.setContentType("keys");
+					byte[] res = curMission.toPublicKeyByteArray();
+					response.setContentLength(res.length);
+					os.write(res);
+				}
 		} catch (Exception e) {
 			e.printStackTrace();
+			response.getWriter().print("*.*failed to get keys");
+		}finally {
+			conn.close();
+			os.close();
 		}
 		
-		response.getWriter().print("*.*failed to get keys");
+		
 
 	}
 	

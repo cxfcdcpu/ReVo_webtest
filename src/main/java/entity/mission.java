@@ -1,5 +1,7 @@
 package entity;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Random;
 
@@ -108,7 +110,37 @@ public class mission {
 		return capacity;
 	}
 	
+	public void setupPublicKey(byte[] vg1, byte[] vg2, byte[] vg2_beta, byte[] vg1_a, byte[] ve_gg_alpha) {
+		g1 = vg1;
+		g2 = vg2;
+		g2_beta = vg2_beta;
+		g1_a = vg1_a;
+		e_gg_alpha = ve_gg_alpha;
+	}
 	
+	public byte[] toPublicKeyByteArray() {
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		
+		try {
+			os.write(EntityHelper.int_to_bytes(g1.length));
+			os.write(g1);
+			os.write(EntityHelper.int_to_bytes(g2.length));
+			os.write(g2);
+			os.write(EntityHelper.int_to_bytes(g1_a.length));
+			os.write(g1_a);
+			os.write(EntityHelper.int_to_bytes(g2_beta.length));
+			os.write(g2_beta);
+			os.write(EntityHelper.int_to_bytes(e_gg_alpha.length));
+			os.write(e_gg_alpha);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		
+		return os.toByteArray();
+		
+	}
 	
 
 }

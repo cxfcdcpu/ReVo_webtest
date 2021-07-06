@@ -31,6 +31,8 @@ public class TestJPBC {
 		System.out.println(prik);
 		prik.printPrivateKey();
 
+		
+		
 		MasterKey mk = testABE.getMasterKey();
 		System.out.println(mk);
 		mk.printMasterKey();
@@ -43,13 +45,26 @@ public class TestJPBC {
 		myb=pairing.getG1().newRandomElement().toBytes();
 		System.out.println(myb.length);
 		
+
+		Element e1 = pairing.getG1().newRandomElement();
+		Element e2 = pairing.getG1().newElementFromBytes(e1.toBytes());
+		if(e1.isEqual(e2)) {
+			System.out.printf("e1 (%s)== e2 (%s)", e1.toString(), e2.toString());
+		}else {
+			System.out.println("e1 != e2");
+		}
+		
 		mission testMission=new mission("Super mission", 1000);
 		testMission.setupKeysFromReVo(testABE);
 		Timestamp tp = new Timestamp(System.currentTimeMillis()+100000000);
 		testMission.setEndTime(tp);
 		DBConnection connection = DBConnectionFactory.getConnection();
 		connection.insertMission(testMission);
-		
+		System.out.println(testMission.getG1().length);
+		System.out.println(testMission.getG2().length);
+		System.out.println(testMission.getG1a().length);
+		System.out.println(testMission.getG2_beta().length);
+		System.out.println(testMission.getE_gg_alpha().length);
 		
 		
 		
