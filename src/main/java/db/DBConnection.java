@@ -4,6 +4,7 @@ import java.util.Set;
 
 import java.sql.*;
 
+import entity.MissionInfo;
 import entity.mission;
 import entity.user;
 public interface DBConnection {
@@ -12,7 +13,7 @@ public interface DBConnection {
 	
 	public user searchUser(String username);
 	
-
+	public List<MissionInfo> getAllMissions();
 	
 	public boolean verifyLogin(String username, String password);
 	

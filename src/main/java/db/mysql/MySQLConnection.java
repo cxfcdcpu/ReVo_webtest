@@ -9,8 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
+import entity.MissionInfo;
 import entity.mission;
 import entity.user;
 
@@ -205,5 +207,27 @@ public class MySQLConnection implements DBConnection{
 		
 		return null;
 	}
+
+	@Override
+	public List<MissionInfo> getAllMissions() {
+		String sql = "SELECT * FROM mission";
+		List<MissionInfo> res = new ArrayList<MissionInfo>();
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				res.add(new MissionInfo(rs.getString("missionName"),rs.getString("missionCode"),rs.getInt("capacity")));
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return res;
+	}
+	
+	
+	
+	
 
 }
