@@ -29,6 +29,18 @@ public class RpcHelper {
 
 	}
 	
+	public static void writeJsonString(HttpServletResponse response, String obj) {
+		try {
+			response.setContentType("application/json");
+			response.addHeader("Access-Control-Allow-Origin", "*");
+			PrintWriter out = response.getWriter();
+			out.print(obj);
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void writeJsonObject(HttpServletResponse response, JSONObject obj) {
 		try {
 			response.setContentType("application/json");

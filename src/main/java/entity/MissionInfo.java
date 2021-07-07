@@ -10,4 +10,8 @@ public class MissionInfo {
 		MissionCode = code;
 		MissionCapacity = capacity;
 	}
+	
+	public String toString() {
+		return "["+MissionName+" "+MissionCode+" "+MissionCapacity+"]";
+	}
 }

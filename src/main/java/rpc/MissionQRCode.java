@@ -37,7 +37,9 @@ public class MissionQRCode extends HttpServlet {
 		// TODO Auto-generated method stub
 		OutputStream os = response.getOutputStream();
 		DBConnection conn = DBConnectionFactory.getConnection();		
-		String paramValue = request.getParameter("missionCode");	
+		String paramValue = request.getParameter("missionCode");
+		
+		System.out.println(paramValue);
 		try {
 			mission curMission = conn.searchMissionByCode(paramValue);
 			if(curMission!=null) {

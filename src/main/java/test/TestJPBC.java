@@ -21,8 +21,9 @@ public class TestJPBC {
 		// TODO Auto-generated method stub
 		Pairing pairing = PairingFactory.getPairing("./src/main/java/a.properties");
 		PairingFactory.getInstance().setUsePBCWhenPossible(true);
-
-		ReVo_ABE testABE = new ReVo_ABE(pairing, 8);
+		int nodecount = 1000;
+		mission testMission=new mission("Display Port", nodecount);
+		ReVo_ABE testABE = new ReVo_ABE(pairing, nodecount);
 		List<String> attr_list= new ArrayList<String>();
 		attr_list.add("phd");
 		attr_list.add("master");
@@ -53,8 +54,7 @@ public class TestJPBC {
 		}else {
 			System.out.println("e1 != e2");
 		}
-		
-		mission testMission=new mission("Super mission", 1000);
+
 		testMission.setupKeysFromReVo(testABE);
 		Timestamp tp = new Timestamp(System.currentTimeMillis()+100000000);
 		testMission.setEndTime(tp);
