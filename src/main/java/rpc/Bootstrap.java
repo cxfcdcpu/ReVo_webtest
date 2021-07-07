@@ -65,9 +65,12 @@ public class Bootstrap extends HttpServlet {
 					response.setContentLength(res.length);
 					os.write(res);
 				}
+				else {
+					response.sendError(204);
+				}
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.getWriter().print("*.*failed to get keys");
+			
 		}finally {
 			conn.close();
 			os.close();
