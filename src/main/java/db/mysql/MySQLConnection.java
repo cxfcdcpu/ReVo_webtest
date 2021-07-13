@@ -226,7 +226,23 @@ public class MySQLConnection implements DBConnection{
 		return res;
 	}
 	
-	
+	@Override
+	public List<user> getAllUsers() {
+		String sql = "SELECT * FROM user";
+		List<user> res = new ArrayList<user>();
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				res.add(new user(rs.getString("username"),rs.getString("firstname"),rs.getString("lastname")));
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return res;
+	}
 	
 	
 

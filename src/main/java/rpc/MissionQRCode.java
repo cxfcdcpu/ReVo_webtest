@@ -43,7 +43,7 @@ public class MissionQRCode extends HttpServlet {
 		try {
 			mission curMission = conn.searchMissionByCode(paramValue);
 			if(curMission!=null) {
-				BufferedImage bi = QRCodeHelper.generateEAN13BarcodeImage(curMission.getMissionCode());
+				BufferedImage bi = QRCodeHelper.generatePDF417Image(curMission.getMissionCode());
 			
 				//--Send the data to response
 				response.setContentType("image/jpeg");

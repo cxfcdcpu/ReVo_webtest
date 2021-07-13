@@ -1,37 +1,33 @@
 package rpc;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import db.DBConnection;
 import db.DBConnectionFactory;
 import entity.MissionInfo;
-import entity.mission;
-import qrcode.QRCodeHelper;
-import com.google.gson.*;
-import org.json.JSONObject;
+import entity.user;
+
 /**
- * Servlet implementation class Missions
+ * Servlet implementation class Users
  */
-@WebServlet("/Missions")
-public class Missions extends HttpServlet {
+@WebServlet("/Users")
+public class Users extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Missions() {
+    public Users() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,17 +37,16 @@ public class Missions extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//OutputStream os = response.getOutputStream();
 		DBConnection conn = DBConnectionFactory.getConnection();	
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		System.out.println("create gson successfully");
 		try {
-			List<MissionInfo> curMission = conn.getAllMissions();
-			System.out.println("get list of mission info successfully");
-			if(curMission!=null&&curMission.size()!=0) {
-				//System.out.println(gson.toJson(curMission));
+			List<user> curUsers = conn.getAllUsers();
+			System.out.println("get list of user infos successfully");
+			if(curUsers!=null&&curUsers.size()!=0) {
+				//System.out.println(gson.toJson(curUsers));
 
-				RpcHelper.writeJsonString(response, gson.toJson(curMission));
+				RpcHelper.writeJsonString(response, gson.toJson(curUsers));
 				System.out.println("write response successfully");
 				//os.close();
 			}else {
@@ -64,15 +59,28 @@ public class Missions extends HttpServlet {
 		 } finally{
 			 conn.close();
 			 //os.close();
-			 
-			 
 		 }
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
+	 */
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}
 

@@ -54,9 +54,9 @@ public class Bootstrap extends HttpServlet {
 		DBConnection conn = DBConnectionFactory.getConnection();
 		try {
 				JSONObject input = RpcHelper.readJsonObject(request);
-				String username = input.getString("username");
-				String password = input.getString("password");
-				String missionCode = input.getString("missionCode");
+				String username = input.getString("username").trim();
+				String password = input.getString("password").trim();
+				String missionCode = input.getString("missionCode").trim();
 				
 				mission curMission = conn.searchMissionByCode(missionCode);
 				if (conn.verifyLogin(username, password) && curMission !=null) {

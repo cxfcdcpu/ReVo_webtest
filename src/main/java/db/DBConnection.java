@@ -14,6 +14,7 @@ public interface DBConnection {
 	public user searchUser(String username);
 	
 	public List<MissionInfo> getAllMissions();
+	public List<user> getAllUsers();
 	
 	public boolean verifyLogin(String username, String password);
 	
@@ -24,4 +25,6 @@ public interface DBConnection {
 	public mission searchMission(String missionName);
 	
 	public mission searchMissionByCode(String missionCode);
+	
+	
 }

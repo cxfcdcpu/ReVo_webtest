@@ -11,6 +11,7 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.EAN13Writer;
+import com.google.zxing.pdf417.PDF417Writer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import javax.imageio.*;
@@ -31,4 +32,10 @@ public class QRCodeHelper {
 	}
 
 
+	public static BufferedImage generatePDF417Image(String codeText) throws Exception{
+		PDF417Writer pdf417Writer = new PDF417Writer();
+		BitMatrix bitMatrix = pdf417Writer.encode(codeText, BarcodeFormat.PDF_417, 500, 250);
+		return MatrixToImageWriter.toBufferedImage(bitMatrix);
+	}
+	
 }

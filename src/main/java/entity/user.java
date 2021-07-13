@@ -1,5 +1,6 @@
 package entity;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,11 +10,18 @@ public class user {
 	private List<String> attributes;
 	private String firstname;
 	private String lastname;
+	private Timestamp registerationTime;
 	
 	public user(String un, String pw) {
 		this.username = un;
 		this.password = pw;
 		this.attributes=new ArrayList<String>();
+	}
+	
+	public user(String un, String firstname, String lastname) {
+		this.username = un;
+		this.firstname = firstname;
+		this.lastname = lastname;
 	}
 	
 	public void setFirstname(String first) {
