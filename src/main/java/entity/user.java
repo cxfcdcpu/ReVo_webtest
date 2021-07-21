@@ -2,6 +2,7 @@ package entity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class user {
@@ -22,6 +23,18 @@ public class user {
 		this.username = un;
 		this.firstname = firstname;
 		this.lastname = lastname;
+	}
+	
+	public user(String un, String pw, String firstname, String lastname, List<String> attr) {
+		this.username = un;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.attributes=new ArrayList<String>();
+        for(String attrItem: attr){
+            this.attributes.add( attrItem);
+        }
+        this.password = pw;
+		
 	}
 	
 	public void setFirstname(String first) {

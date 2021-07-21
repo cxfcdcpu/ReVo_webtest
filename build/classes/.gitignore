@@ -1,6 +1,4 @@
-/db/
-/qrcode/
-/rpc/
-/test/
-/rsa/
 /entity/
+/rpc/
+/db/
+/test/

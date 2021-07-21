@@ -5,6 +5,11 @@ import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,6 +33,22 @@ public class RpcHelper {
 		return null;
 
 	}
+	
+	public static Timestamp convertStringToTimestamp(String strDate) {
+	    try {
+	      DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+	       // you can change format of date
+	      Date date = formatter.parse(strDate);
+	      Timestamp timeStampDate = new Timestamp(date.getTime());
+
+	      return timeStampDate;
+	    } catch (Exception e) {
+	      System.out.println("Exception :" + e);
+	      
+	      return null;
+	    }
+	  }
+	
 	
 	public static void writeJsonString(HttpServletResponse response, String obj) {
 		try {

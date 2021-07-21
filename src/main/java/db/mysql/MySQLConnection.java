@@ -125,8 +125,8 @@ public class MySQLConnection implements DBConnection{
 	@Override
 	public boolean insertMission(mission ms) {
 		// TODO Auto-generated method stub
-		String sql = "INSERT INTO mission (missionName,missionCode,endTime,capacity,g1_alpha,beta,g1,g2,g2_beta,e_gg_alpha,g1_a)"
-				+ "VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+		String sql = "INSERT INTO mission (missionName,missionCode,startTime,endTime,capacity,g1_alpha,beta,g1,g2,g2_beta,e_gg_alpha,g1_a)"
+				+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
 		try {
 			mission curMission1 = searchMission(ms.getMissionName());
 			mission curMission2 = searchMissionByCode(ms.getMissionCode());
@@ -135,14 +135,15 @@ public class MySQLConnection implements DBConnection{
 				stmt.setString(1, ms.getMissionName());
 				stmt.setString(2, ms.getMissionCode());
 				stmt.setTimestamp(3, ms.getEndTime());
-				stmt.setInt(4, ms.getCapacity());
-				stmt.setBytes(5, ms.getG1_alpha());
-				stmt.setBytes(6, ms.getBeta());
-				stmt.setBytes(7, ms.getG1());
-				stmt.setBytes(8, ms.getG2());
-				stmt.setBytes(9, ms.getG2_beta());
-				stmt.setBytes(10, ms.getE_gg_alpha());
-				stmt.setBytes(11, ms.getG1a());
+				stmt.setTimestamp(4, ms.getEndTime());
+				stmt.setInt(5, ms.getCapacity());
+				stmt.setBytes(6, ms.getG1_alpha());
+				stmt.setBytes(7, ms.getBeta());
+				stmt.setBytes(8, ms.getG1());
+				stmt.setBytes(9, ms.getG2());
+				stmt.setBytes(10, ms.getG2_beta());
+				stmt.setBytes(11, ms.getE_gg_alpha());
+				stmt.setBytes(12, ms.getG1a());
 				stmt.executeUpdate();
 				return true;
 			}

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Random;
 
+import it.unisa.dia.gas.jpbc.Pairing;
+import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 import revoabe.MasterKey;
 import revoabe.PublicKey;
 import revoabe.ReVo_ABE;
@@ -27,6 +29,27 @@ public class mission {
 		this.missionName = missionName;
 		this.capacity = capacity;
 		this.randomMissionCode();
+		this.revo_ABE_setup();
+	}
+	
+	public mission(String missionName, int capacity, Timestamp startTime, Timestamp endTime) {
+		this.missionName = missionName;
+		this.capacity = capacity;
+		this.randomMissionCode();
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.revo_ABE_setup();
+	}
+	
+	
+	public void revo_ABE_setup() {
+		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+		Pairing pairing = PairingFactory.getPairing(rpc.ConstantForServer.projectDir+"/src/main/java/a.properties");
+		PairingFactory.getInstance().setUsePBCWhenPossible(true);
+		ReVo_ABE testABE = new ReVo_ABE(pairing, this.capacity);
+		MasterKey mk = testABE.getMasterKey();
+		PublicKey pk = testABE.getPublicKey();
+		this.setupKeysFromReVo(testABE);
 	}
 	
 	public void randomMissionCode() {

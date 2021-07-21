@@ -58,6 +58,7 @@ public class TestJPBC {
 		testMission.setupKeysFromReVo(testABE);
 		Timestamp tp = new Timestamp(System.currentTimeMillis()+100000000);
 		testMission.setEndTime(tp);
+		testMission.setStartTime(tp);
 		DBConnection connection = DBConnectionFactory.getConnection();
 		connection.insertMission(testMission);
 		System.out.println(testMission.getG1().length);
