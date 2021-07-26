@@ -1,0 +1,11 @@
+T__0=1
+Operator=2
+WHITESPACE=3
+LPAR=4
+RPAR=5
+BinOperator=6
+NUM=7
+WORD=8
+'!'=1
+'('=4
+')'=5
