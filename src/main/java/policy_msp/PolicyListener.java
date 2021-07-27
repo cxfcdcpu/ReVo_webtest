@@ -1,5 +1,5 @@
-
 package policy_msp;
+
 // Generated from Policy.g4 by ANTLR 4.9.2
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -78,4 +78,14 @@ public interface PolicyListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNode(PolicyParser.NodeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PolicyParser#operator}.
+	 * @param ctx the parse tree
+	 */
+	void enterOperator(PolicyParser.OperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PolicyParser#operator}.
+	 * @param ctx the parse tree
+	 */
+	void exitOperator(PolicyParser.OperatorContext ctx);
 }

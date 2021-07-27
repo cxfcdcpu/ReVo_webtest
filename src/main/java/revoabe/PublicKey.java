@@ -1,7 +1,6 @@
 package revoabe;
 
 import it.unisa.dia.gas.jpbc.Element;
-import tree_type.MembershipTree;
 
 public class PublicKey{
 	MembershipTree membership_tree;

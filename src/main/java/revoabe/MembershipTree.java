@@ -1,4 +1,4 @@
-package tree_type;
+package revoabe;
 import it.unisa.dia.gas.jpbc.*;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 
@@ -16,21 +16,21 @@ public class MembershipTree{
 	HashMap<Integer,TreeNode> user_id_to_leaf; //all leafnodes and ids
 	
 	public MembershipTree(int maxNodes, Element g, Pairing pairingFactory) {
-		m = maxNodes;
-		user_id_to_leaf = new HashMap<Integer, TreeNode>();
-		g1 = g;
-		group = pairingFactory;
-		root = createTree();
+		this.m = maxNodes;
+		this.user_id_to_leaf = new HashMap<Integer, TreeNode>();
+		this.g1 = g;
+		this.group = pairingFactory;
+		this.root = createTree();
 	}
 	
 	public TreeNode createTree() {
-		if(m<1) return null;
-		user_id_counter = 1;
-		return dfs(null,1,log2(m));
+		if(this.m<1) return null;
+		this.user_id_counter = 1;
+		return dfs(null,1,log2(this.m));
 	}
 	
 	private TreeNode createTreeNode(TreeNode parent, int y_i) {
-		TreeNode node = new TreeNode(y_i, g1.powZn(group.getZr().newRandomElement()),parent);
+		TreeNode node = new TreeNode(y_i, this.g1.powZn(this.group.getZr().newRandomElement()),parent);
 		return node;
 	}
 	
@@ -38,9 +38,9 @@ public class MembershipTree{
 	private TreeNode dfs(TreeNode parent, int y_i, int h) {
 		TreeNode node = createTreeNode(parent, y_i);
 		if (h == 0) {
-			node.user_id = user_id_counter;
-			user_id_to_leaf.put(user_id_counter, node);
-			user_id_counter+=1;
+			node.user_id = this.user_id_counter;
+			this.user_id_to_leaf.put(this.user_id_counter, node);
+			this.user_id_counter+=1;
 			return node;
 		}
 		else {
@@ -52,10 +52,10 @@ public class MembershipTree{
 	
 	public List<TreeNode> getUserPath(int user_id){
 		List<TreeNode> ret = new ArrayList<TreeNode>();
-		if (!(user_id>=1 && user_id<= m)) {
+		if (!(user_id>=1 && user_id<= this.m)) {
 			return ret;
 		}
-		TreeNode node= user_id_to_leaf.get(user_id);
+		TreeNode node= this.user_id_to_leaf.get(user_id);
 		while (node!=null) {
 			ret.add(node);
 			node = node.parent;
@@ -83,8 +83,10 @@ public class MembershipTree{
 			}
 			else {
 				curNode.color = curNode.GREEN;
-				bfsList.add(curNode.left);
-				bfsList.add(curNode.right);
+				if(curNode.left != null)
+					bfsList.add(curNode.left);
+				if(curNode.right != null)
+					bfsList.add(curNode.right);
 			}
 		}
 		return ret;
@@ -97,12 +99,12 @@ public class MembershipTree{
 		if ( RL != null && RL.size() != 0) {
 			for (int user_id : RL) {
 				if(user_id>=1 && user_id <= m) {
-					colorRED(user_id_to_leaf.get(user_id));
+					colorRED(this.user_id_to_leaf.get(user_id));
 				}
 			}
 		}
 		
-		return getSubsetCoverNodesAndResetColor(root);
+		return getSubsetCoverNodesAndResetColor(this.root);
 		
 	}
 	

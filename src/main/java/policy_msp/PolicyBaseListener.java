@@ -96,6 +96,18 @@ public class PolicyBaseListener implements PolicyListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNode(PolicyParser.NodeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOperator(PolicyParser.OperatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOperator(PolicyParser.OperatorContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

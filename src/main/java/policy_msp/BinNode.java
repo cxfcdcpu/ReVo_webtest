@@ -31,6 +31,13 @@ public class BinNode {
 		this.assignAttr(attr);
 	}
 	
+	public BinNode(BinNode n1, BinNode n2, BinNode n3) {
+		this.init();
+		this.assignType(n1.type);
+		this.left = n2;
+		this.right = n3;
+		
+	}
 	
 	public BinNode(OpType value, String attr, BinNode left, BinNode right) {
 		this.init();
@@ -141,6 +148,24 @@ public class BinNode {
 	public void addSubNode(BinNode left, BinNode right) {
 		this.left = left!=null?left:null;
 		this.right = right!=null?right:null;
+	}
+	
+
+	
+	public void printTree() {
+		System.out.println(this.type +":"+ this.attribute);
+		if (this.left == null) {
+			System.out.println("None");
+		}
+		else {
+			this.left.printTree();
+		}
+		if (this.right == null) {
+			System.out.println("None");
+		}
+		else {
+			this.right.printTree();
+		}
 	}
 	
 	

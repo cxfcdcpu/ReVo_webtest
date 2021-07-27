@@ -1,4 +1,4 @@
-package tree_type;
+package revoabe;
 import it.unisa.dia.gas.jpbc.*;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 //import java.lang.Math.*;
@@ -16,17 +16,17 @@ public class TreeNode{
 	Boolean color;
 	
 	public TreeNode(int yi, Element gyi, TreeNode par) {
-		y_i = yi;
-		g_y_i = gyi;
-		left = null;
-		right = null;
-		parent = par;
-		color = GREEN;	
-		user_id = -1;
+		this.y_i = yi;
+		this.g_y_i = gyi;
+		this.left = null;
+		this.right = null;
+		this.parent = par;
+		this.color = GREEN;	
+		this.user_id = -1;
 	}
 	
 	public void printNode() {
-		System.out.println("UserID: "+user_id+" y_i: "+y_i);
+		System.out.println("UserID: "+this.user_id+" y_i: "+this.y_i);
 	}
 	
 	

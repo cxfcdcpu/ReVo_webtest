@@ -1,10 +1,15 @@
 package revoabe;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import it.unisa.dia.gas.jpbc.*;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
-import tree_type.*;
+import policy_msp.BinNode;
+import policy_msp.MSP_Builder;
+
 
 public class ReVo_ABE {
 	int nodeCount;
@@ -75,6 +80,48 @@ public class ReVo_ABE {
 		}
 		return new PrivateKey(attr_list,K_i,L,K_y);
 	}
+	
+	public void encrypt(PublicKey pk, String msg, String policyString, List<Integer> RL) {
+		MSP_Builder util = new MSP_Builder();
+		BinNode policy = util.createPolicy(policyString);
+
+		Hashtable<String,List<Integer>> mono_span_prog = util.convert_policy_to_msp(policy);
+		int num_cols = util.getLongestRow();
+		
+		List<Element> u = new ArrayList<Element>();
+		for (int i=0; i<num_cols; i++) {
+			
+			Element rand = this.group.getZr().newRandomElement();
+			//System.out.println(rand);
+			u.add(rand);
+		}
+		//shared secret
+		Element s = u.get(0);
+		Element r = this.group.getZr().newRandomElement();
+		Element C_prime = pk.g2_beta.powZn(s);
+		Element D = pk.g2.powZn(r);
+		HashMap<Integer,Element> C_y = new HashMap<Integer,Element>();
+		for (TreeNode node : pk.membership_tree.getSubsetCover(RL)) {
+			C_y.put(node.y_i, node.g_y_i.powZn(s));
+		}
+		
+		HashMap<String,Element> C_i = new HashMap<String,Element>();
+		for (Map.Entry<String, List<Integer>> ele : mono_span_prog.entrySet()) {
+			String attr = ele.getKey();
+			List<Integer> row = ele.getValue();
+			int cols = row.size();
+			Element lambda_i = this.group.getZr().newZeroElement();
+			System.out.println(attr);
+			for (int i = 0; i<cols; i++) {
+				lambda_i = lambda_i.add(u.get(i).mul(row.get(i)));
+			}
+			
+		}
+		
+	}
+	
+	
+	
 	
 	public int getNodeCount() {
 		return nodeCount;
