@@ -97,6 +97,14 @@ public class MSP_Builder {
 		return ret;		
 	}
 	
+	public String strip_index(String attr) {
+		if(attr.lastIndexOf("_")!=-1) {
+			return attr.substring(0, attr.lastIndexOf("_"));
+		}
+		return attr;
+	}
+	
+	
 	public int getLongestRow() {
 		return this.len_longest_row;
 	}

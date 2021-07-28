@@ -1,4 +1,5 @@
 package revoabe;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -81,7 +82,7 @@ public class ReVo_ABE {
 		return new PrivateKey(attr_list,K_i,L,K_y);
 	}
 	
-	public void encrypt(PublicKey pk, String msg, String policyString, List<Integer> RL) {
+	public Ciphertext encrypt(PublicKey pk, String msg, String policyString, List<Integer> RL) {
 		MSP_Builder util = new MSP_Builder();
 		BinNode policy = util.createPolicy(policyString);
 
@@ -115,8 +116,17 @@ public class ReVo_ABE {
 			for (int i = 0; i<cols; i++) {
 				lambda_i = lambda_i.add(u.get(i).mul(row.get(i)));
 			}
+			String attr_stripped = util.strip_index(attr);
+			byte[] at = attr_stripped.getBytes();
+			C_i.put(attr, (pk.g1_a.powZn(lambda_i)).div(this.group.getG1().newElementFromHash(at , 0, at.length).powZn(r)));
 			
 		}
+		Element seed = this.group.getGT().newElementFromBytes(msg.getBytes());
+//		System.out.println(seed.toString());
+//		System.out.println(new String(seed.toCanonicalRepresentation(), StandardCharsets.UTF_8));
+//		System.out.println(new String(seed.toBytes(), StandardCharsets.UTF_8));
+		Element C = (pk.e_gg_alpha.powZn(s)).mul(seed);
+		return new Ciphertext(policy, C, C_prime, D, C_y, C_i);	
 		
 	}
 	
