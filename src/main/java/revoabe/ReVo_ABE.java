@@ -121,7 +121,7 @@ public class ReVo_ABE {
 			C_i.put(attr, (pk.g1_a.powZn(lambda_i)).div(this.group.getG1().newElementFromHash(at , 0, at.length).powZn(r)).getImmutable());
 			
 		}
-		Element seed = this.group.getGT().newElementFromBytes(msg).getImmutable();
+		Element seed = this.group.getGT().newRandomElement().getImmutable();
 //		System.out.println(msg);
 //		System.out.println(seed.toString());
 //		printBytes(seed.toBytes());
