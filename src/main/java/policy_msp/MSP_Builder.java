@@ -97,7 +97,7 @@ public class MSP_Builder {
 		return ret;		
 	}
 	
-	public String strip_index(String attr) {
+	public static String strip_index(String attr) {
 		if(attr.lastIndexOf("_")!=-1) {
 			return attr.substring(0, attr.lastIndexOf("_"));
 		}
@@ -109,7 +109,106 @@ public class MSP_Builder {
 		return this.len_longest_row;
 	}
 	
+	private static class RA{
+		boolean result;
+		List<BinNode> resultList;
+		public RA(boolean r, List<BinNode> rl) {
+			result = r;
+			resultList = rl;
+		}
+		
+		public RA() {
+			result = false;
+			resultList = null;
+		}
+	}
 	
+	public static List<BinNode> prune(BinNode tree, List<String> attributes){
+		
+		if (tree == null) return null;
+		
+		RA ra = requiredAttributes( tree, attributes);
+		if(ra == null)return null;
+		if(ra.result)return ra.resultList;
+		return null;
+	}
+	
+	public static RA requiredAttributes(BinNode tree, List<String> attrList){
+		
+		if(tree == null)return null;
+		BinNode left = tree.getLeft();
+		BinNode right = tree.getRight();
+		RA leftRa=null;
+		RA rightRa=null;
+		if(left!=null) {
+			leftRa = requiredAttributes(left,attrList);	
+		}
+		if(right!=null) {
+			rightRa = requiredAttributes(right,attrList);	
+		}
+		
+		if(tree.getNodeType() == OpType.OR) {
+			List<BinNode> sendThis;
+			boolean result = false;
+			if(leftRa!=null && leftRa.result) {
+				sendThis = leftRa.resultList;
+				result = true;
+			}
+			else if(rightRa!=null && rightRa.result) {
+				sendThis = rightRa.resultList;
+				result = true;
+			}
+			else sendThis = null;
+			RA resultRA = new RA(result,sendThis);
+			return resultRA;
+		}
+		
+		if(tree.getNodeType() == OpType.AND) {
+			List<BinNode> sendThis;
+			boolean result = false;
+			if(leftRa!=null && leftRa.result && rightRa!=null && rightRa.result) {
+				sendThis = leftRa.resultList;
+				sendThis.addAll(rightRa.resultList);
+				result = true;
+			}
+			else if(leftRa!=null && leftRa.result) {
+				sendThis = leftRa.resultList;
+				result = true;
+				if(rightRa!=null) {
+					result = false;
+				}
+			}
+			else if(rightRa!=null && rightRa.result) {
+				sendThis = rightRa.resultList;
+				result = true;
+				if(leftRa!=null) {
+					result = false;
+				}
+			}
+			else {
+				sendThis = null;
+				result = false;
+			}
+			
+			
+			RA resultRA = new RA(result,sendThis);
+			return resultRA;
+		}
+		
+		if(tree.getNodeType() == OpType.ATTR) {
+			if(attrList.contains(tree.getAttribute())) {
+				List<BinNode> rl = new ArrayList<BinNode>();
+				rl.add(tree);
+				return new RA(true,rl);
+			}
+			else	
+				return new RA();
+		}
+		
+		
+		
+		return null;
+	}
 	
 	
 }

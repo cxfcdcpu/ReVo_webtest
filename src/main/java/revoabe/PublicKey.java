@@ -22,6 +22,7 @@ public class PublicKey{
 	
 	public void printPublicKey() {
 		System.out.println("MembershipTree: "+membership_tree.toString());
+		membership_tree.printAllNodesBFS();
 		System.out.println("g1: "+g1.toString());
 		System.out.println("g2: "+g2.toString());
 		System.out.println("g2_beta: "+g2_beta.toString());
@@ -45,6 +46,10 @@ public class PublicKey{
 	}
 	public byte[] getE_gg_alpha() {
 		return e_gg_alpha.toBytes();
+	}
+	
+	public MembershipTree getMembershipTree() {
+		return membership_tree;
 	}
 
 	

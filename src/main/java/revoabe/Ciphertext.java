@@ -8,12 +8,12 @@ import policy_msp.BinNode;
 public class Ciphertext {
 
 	//TODO: need to change to String rather than obj as cipher text are send as bytearray
-	private BinNode policy;
-	private Element C;
-	private Element C_prime;
-	private Element D;
-	private HashMap<Integer, Element> C_y;
-	private HashMap<String, Element> C_i;
+	BinNode policy;
+	Element C;
+	Element C_prime;
+	Element D;
+	HashMap<Integer, Element> C_y;
+	HashMap<String, Element> C_i;
 	
 	
 	public Ciphertext(BinNode policy, Element C, Element C_prime,Element D, 
@@ -24,6 +24,10 @@ public class Ciphertext {
 		this.D = D;
 		this.C_y = C_y;
 		this.C_i = C_i;
+	}
+	
+	public HashMap<Integer, Element> getCy(){
+		return C_y;
 	}
 	
 }

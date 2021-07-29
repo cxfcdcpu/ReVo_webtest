@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 public class MembershipTree{
 
 	int m; //the maximum number of users for the mission
@@ -30,24 +32,43 @@ public class MembershipTree{
 	}
 	
 	private TreeNode createTreeNode(TreeNode parent, int y_i) {
-		TreeNode node = new TreeNode(y_i, this.g1.powZn(this.group.getZr().newRandomElement()),parent);
+		//TreeNode node = new TreeNode(y_i, this.g1.powZn(this.group.getZr().newRandomElement()),parent);
+		Element currentRandom = this.group.getZr().newRandomElement();
+		Element curr = this.g1.powZn(currentRandom);
+		TreeNode node = new TreeNode(y_i,curr ,parent);
 		return node;
+	}
+	
+	public void testRandom(TreeNode node) {
+		if(node==null)return;
+		System.out.println(node.g_y_i);
+		testRandom(node.left);
+		testRandom(node.right);
+		
+	}
+	
+	public void testLeaf() {
+		for(Entry<Integer, TreeNode> leafset: this.user_id_to_leaf.entrySet()) {
+			leafset.getValue().printNode();
+		}
 	}
 	
 	
 	private TreeNode dfs(TreeNode parent, int y_i, int h) {
 		TreeNode node = createTreeNode(parent, y_i);
+		//node.printNode();
 		if (h == 0) {
 			node.user_id = this.user_id_counter;
 			this.user_id_to_leaf.put(this.user_id_counter, node);
 			this.user_id_counter+=1;
-			return node;
+			//return node;
 		}
 		else {
 			node.left = dfs(node,2*y_i,h-1);
 			node.right = dfs(node, 2*y_i+1,h-1);
-			return node; 
+			//return node; 
 		}
+		return node;
 	}
 	
 	public List<TreeNode> getUserPath(int user_id){
@@ -119,7 +140,9 @@ public class MembershipTree{
 		return group.toString();
 		
 	}
-	
+	public TreeNode getRoot() {
+		return this.root;
+	}
 	
 	
 	

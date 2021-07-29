@@ -26,7 +26,8 @@ public class TreeNode{
 	}
 	
 	public void printNode() {
-		System.out.println("UserID: "+this.user_id+" y_i: "+this.y_i);
+		String parentID = this.parent==null?"None":""+this.parent.user_id;
+		System.out.println("UserID: "+this.user_id+" y_i: "+this.y_i +" color: "+ this.color+ " parID: "+parentID+ " element: "+this.g_y_i);
 	}
 	
 	
