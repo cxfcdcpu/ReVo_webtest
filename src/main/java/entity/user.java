@@ -13,7 +13,7 @@ public class user {
 	private String lastname;
 	private Timestamp registerationTime;
 	
-
+	private int userID;
 	
 	public user(String un, String pw) {
 		this.username = un;
@@ -37,6 +37,10 @@ public class user {
         }
         this.password = pw;
 		
+	}
+	
+	public void setUserID(int id) {
+		this.userID=id;
 	}
 	
 	public void setFirstname(String first) {
@@ -89,5 +93,8 @@ public class user {
 		return sb.substring(0, sb.length()-1);
 	}
 	
+	public int getUserID() {
+		return this.userID;
+	}
 	
 }

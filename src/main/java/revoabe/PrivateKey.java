@@ -1,5 +1,7 @@
 package revoabe;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,4 +28,76 @@ public class PrivateKey {
 		System.out.println("K_y: "+k_y.toString());
 	}
 	
+	public List<String> getAttributes() {
+		return this.attr_list;
+	}
+	
+	public byte[] getL() {
+		return this.L.toBytes();
+		
+	}
+	
+	public HashMap<String, Element> getKI(){
+		return this.k_i;
+	}
+	
+	public HashMap<Integer,Element> getKY(){
+		return this.k_y;
+	}
+	
+	public List<Integer> getAttrSizes(){
+		List<Integer> ret = new ArrayList<Integer>();
+		for(String attr: attr_list) {
+			ret.add(k_i.get(attr).toBytes().length);
+		}
+		return ret;
+	}
+	public int getKISize() {
+		int ret = 0;
+		for(int size : this.getAttrSizes()) {
+			ret+=size;
+		}
+		return ret;
+	}
+	
+	public byte[] getKIs() {
+		ByteBuffer bf = ByteBuffer.allocate(this.getKISize());
+		for(String attr: attr_list) {
+			bf.put(k_i.get(attr).toBytes());
+		}
+		return bf.array();
+		
+	}
+	
+	public List<String> getReVoNodes(){
+		List<String> ret = new ArrayList<String>();
+		for(int node : this.k_y.keySet()) {
+			ret.add(""+node);
+		}
+		return ret;
+	}
+	
+	public List<Integer> getReVoNodeSizes(){
+		List<Integer> ret = new ArrayList<Integer>();
+		for(String node : this.getReVoNodes()) {
+			ret.add(this.k_y.get(Integer.parseInt(node)).toBytes().length);
+		}
+		return ret;
+	}
+	
+	public int getKYSize() {
+		int ret = 0;
+		for(int size : this.getReVoNodeSizes()) {
+			ret+=size;
+		}
+		return ret;
+	}
+	
+	public byte[] getKYs() {
+		ByteBuffer bf = ByteBuffer.allocate(this.getKYSize());
+		for(String node: this.getReVoNodes()) {
+			bf.put(k_y.get(Integer.parseInt(node)).toBytes());
+		}
+		return bf.array();
+	}
 }

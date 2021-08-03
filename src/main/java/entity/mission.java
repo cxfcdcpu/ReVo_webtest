@@ -24,6 +24,7 @@ public class mission {
 	private byte g2_beta[];
 	private byte e_gg_alpha[];
 	private byte g1_a[];
+	private int missionID;
 	
 	public mission(String missionName, int capacity) {
 		this.missionName = missionName;
@@ -56,7 +57,9 @@ public class mission {
 		Random rand = new Random();
 		this.missionCode = String.valueOf(rand.nextInt(2000000000));
 	}
-	
+	public void setMissionID(int id) {
+		this.missionID=id;
+	}
 	public void setMissionCode(String code) {
 		this.missionCode = code;
 	}
@@ -131,6 +134,10 @@ public class mission {
 	
 	public int getCapacity() {
 		return capacity;
+	}
+	
+	public int getMissionID() {
+		return this.missionID;
 	}
 	
 	public void setupPublicKey(byte[] vg1, byte[] vg2, byte[] vg2_beta, byte[] vg1_a, byte[] ve_gg_alpha) {

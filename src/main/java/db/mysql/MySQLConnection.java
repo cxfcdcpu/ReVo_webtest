@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.Match;
 import entity.MissionInfo;
 import entity.mission;
 import entity.user;
@@ -73,6 +74,7 @@ public class MySQLConnection implements DBConnection{
 				user curUser = new user(rs.getString("username"),rs.getString("password")
 						);
 				curUser.setAttributes(rs.getString("attributes"));
+				curUser.setUserID(rs.getInt("userID"));
 				//curUser.setFirstname("first");
 				//curUser.setLastname("Last");
 				return curUser;
@@ -173,6 +175,7 @@ public class MySQLConnection implements DBConnection{
 				curMission.setMissionCode(rs.getString("missionCode"));
 				curMission.setStartTime(rs.getTimestamp("startTime"));
 				curMission.setEndTime(rs.getTimestamp("endTime"));
+				
 				return curMission;
 			}
 			
@@ -243,6 +246,121 @@ public class MySQLConnection implements DBConnection{
 		}
 		
 		return res;
+	}
+
+	@Override
+	public boolean deleteUser(user us) {
+		
+		String sql = "DELETE FROM user WHERE username="+us.getUsername();
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteMission(mission ms) {
+		String sql = "DELETE FROM mission WHERE missionName="+ms.getMissionName();
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean updateUser(user us) {
+		String sql = "UPDATE user SET username = ?, password = ?,"
+					+" attributes = ?, firstname = ?, lastname = ?"
+					+"WHERE userID= ?";
+				
+		try {
+			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, us.getUsername());
+			stmt.setString(2, us.getPassword());
+			stmt.setString(3, us.getAttributes());
+			stmt.setString(4, us.getFirstname());
+			stmt.setString(5, us.getLastname());
+			stmt.setInt(6, us.getUserID());
+			stmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	
+		return false;
+	}
+
+	
+	
+	@Override
+	//updateMission, must have missionID.
+	public boolean updateMission(mission ms) {
+		String sql = "UPDATE mission SET missionName = ?, missionCode = ?, "
+					+"startTime = ?, endTime = ?, capacity = ?, g1_alpha = ?,"
+					+" beta = ?, g1 = ?, g2 = ?, g2_beta = ?, e_gg_alpha = ?,"
+					+" g1_a = ? WHERE missionID = ?";
+				//"UPDATE mission (missionName,missionCode,startTime,endTime,capacity,g1_alpha,beta,g1,g2,g2_beta,e_gg_alpha,g1_a)"
+				
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, ms.getMissionName());
+			stmt.setString(2, ms.getMissionCode());
+			stmt.setTimestamp(3, ms.getEndTime());
+			stmt.setTimestamp(4, ms.getEndTime());
+			stmt.setInt(5, ms.getCapacity());
+			stmt.setBytes(6, ms.getG1_alpha());
+			stmt.setBytes(7, ms.getBeta());
+			stmt.setBytes(8, ms.getG1());
+			stmt.setBytes(9, ms.getG2());
+			stmt.setBytes(10, ms.getG2_beta());
+			stmt.setBytes(11, ms.getE_gg_alpha());
+			stmt.setBytes(12, ms.getG1a());
+			stmt.setInt(13, ms.getMissionID());
+			stmt.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean insertMatch(Match mc) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteMatch(Match mc) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean updateMatch(Match mc) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Match searchMatch(mission ms, user us) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

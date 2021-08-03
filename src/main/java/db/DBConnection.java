@@ -4,6 +4,7 @@ import java.util.Set;
 
 import java.sql.*;
 
+import entity.Match;
 import entity.MissionInfo;
 import entity.mission;
 import entity.user;
@@ -27,5 +28,20 @@ public interface DBConnection {
 	
 	public mission searchMissionByCode(String missionCode);
 	
+	public boolean deleteUser(user us);
+	
+	public boolean deleteMission(mission ms);
+	
+	public boolean updateUser(user us);
+	
+	public boolean updateMission(mission ms);
+	
+	public boolean insertMatch(Match mc);
+	
+	public boolean deleteMatch(Match mc);
+	
+	public boolean updateMatch(Match mc);
+	
+	public Match searchMatch(mission ms, user us);
 	
 }
