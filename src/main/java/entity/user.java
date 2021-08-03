@@ -13,6 +13,8 @@ public class user {
 	private String lastname;
 	private Timestamp registerationTime;
 	
+
+	
 	public user(String un, String pw) {
 		this.username = un;
 		this.password = pw;
