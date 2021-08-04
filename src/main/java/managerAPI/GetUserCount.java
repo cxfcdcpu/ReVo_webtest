@@ -1,4 +1,4 @@
-package rpc;
+package managerAPI;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,19 +15,19 @@ import com.google.gson.GsonBuilder;
 
 import db.DBConnection;
 import db.DBConnectionFactory;
-import entity.MissionInfo;
+import entity.user;
 
 /**
- * Servlet implementation class GetMissionCount
+ * Servlet implementation class GetUserCount
  */
-@WebServlet("/GetMissionCount")
-public class GetMissionCount extends HttpServlet {
+@WebServlet("/GetUserCount")
+public class GetUserCount extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetMissionCount() {
+    public GetUserCount() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,12 +41,13 @@ public class GetMissionCount extends HttpServlet {
 		//Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		System.out.println("create gson successfully");
 		try {
-			List<MissionInfo> curMission = conn.getAllMissions();
-			System.out.println("get list of mission info successfully");
-			if(curMission!=null&&curMission.size()!=0) {
-				//System.out.println(gson.toJson(curMission));
+			List<user> curUsers = conn.getAllUsers();
+			System.out.println("get list of user infos successfully");
+			if(curUsers!=null&&curUsers.size()!=0) {
+				//System.out.println(gson.toJson(curUsers));
+
 				PrintWriter out = response.getWriter();
-				String resp = String.format("{\"MissionCount\": %d}", curMission.size());
+				String resp = String.format("{\"UserCount\": %d}", curUsers.size());
 				out.print(resp);
 				out.close();
 				//RpcHelper.writeJsonString(response, gson.toJson(curMission));
@@ -54,7 +55,7 @@ public class GetMissionCount extends HttpServlet {
 				//os.close();
 			}else {
 				PrintWriter out = response.getWriter();
-				String resp = String.format("{\"MissionCount\": %d}", 0);
+				String resp = String.format("{\"UserCount\": %d}", 0);
 				out.print(resp);
 				out.close();
 				//response.sendError(204);
@@ -66,8 +67,6 @@ public class GetMissionCount extends HttpServlet {
 		 } finally{
 			 conn.close();
 			 //os.close();
-			 
-			 
 		 }
 	}
 

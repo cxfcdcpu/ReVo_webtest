@@ -1,13 +1,16 @@
 package entity;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Random;
 
+import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 import revoabe.MasterKey;
+import revoabe.MembershipTree;
 import revoabe.PublicKey;
 import revoabe.ReVo_ABE;
 
@@ -25,10 +28,12 @@ public class mission {
 	private byte e_gg_alpha[];
 	private byte g1_a[];
 	private int missionID;
+	private String curveFileDir;
 	
 	public mission(String missionName, int capacity) {
 		this.missionName = missionName;
 		this.capacity = capacity;
+		
 		this.randomMissionCode();
 		this.revo_ABE_setup();
 	}
@@ -42,16 +47,20 @@ public class mission {
 		this.revo_ABE_setup();
 	}
 	
-	
+	//TO-DO, need to modify this to be a more gernetic function take curver property file dir as the input. 
 	public void revo_ABE_setup() {
-		System.out.println("Working Directory = " + System.getProperty("user.dir"));
-		Pairing pairing = PairingFactory.getPairing(rpc.ConstantForServer.projectDir+"/src/main/java/a.properties");
+		this.curveFileDir = ReVo_ABE.hardcodedCurveFileDir("a.properties");
+		
+		Pairing pairing = PairingFactory.getPairing(this.curveFileDir);
 		PairingFactory.getInstance().setUsePBCWhenPossible(true);
 		ReVo_ABE testABE = new ReVo_ABE(pairing, this.capacity);
 		MasterKey mk = testABE.getMasterKey();
 		PublicKey pk = testABE.getPublicKey();
 		this.setupKeysFromReVo(testABE);
 	}
+	
+
+	
 	
 	public void randomMissionCode() {
 		Random rand = new Random();
@@ -147,6 +156,28 @@ public class mission {
 		g1_a = vg1_a;
 		e_gg_alpha = ve_gg_alpha;
 	}
+	
+	public MasterKey getMasterKey() {
+		Pairing group = PairingFactory.getPairing(this.curveFileDir);
+		return new MasterKey(group.getG1().newElementFromBytes(this.g1_alpha).getImmutable(), group.getZr().newElementFromBytes(beta).getImmutable());
+	}
+	
+	public PublicKey getPublicKey() {
+		Pairing group = PairingFactory.getPairing(this.curveFileDir);
+		Element gg1 = group.getG1().newElementFromBytes(this.g1).getImmutable();
+		Element gg2 = group.getG2().newElementFromBytes(this.g2).getImmutable();
+		Element gg1_a = group.getG1().newElementFromBytes(this.g1_a).getImmutable();
+		Element gg2_beta = group.getG2().newElementFromBytes(this.g2_beta).getImmutable();
+		Element egg_a = group.getGT().newElementFromBytes(this.e_gg_alpha).getImmutable();
+		return new PublicKey(this.getMembershipTree(),gg1 , gg2, gg2_beta, egg_a, gg1_a);
+		
+	}
+	
+	public MembershipTree	getMembershipTree() {
+		Pairing group = PairingFactory.getPairing(this.curveFileDir);
+		return new MembershipTree(this.capacity,group.getG1().newElementFromBytes(this.g1).getImmutable(),group);
+	}
+	
 	
 	public byte[] toPublicKeyByteArray() {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();

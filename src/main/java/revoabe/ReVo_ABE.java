@@ -1,4 +1,5 @@
 package revoabe;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,6 +81,42 @@ public class ReVo_ABE {
 		return new PrivateKey(al,K_i,L,K_y);
 	}
 	
+	public static PrivateKey keyGen(PublicKey publicKey, MasterKey masterKey, List<String> attr_list, int user_id ) {
+		if (publicKey.membership_tree == null || user_id < 1 || user_id > publicKey.membership_tree.m) {
+			return null;
+		}
+		List<String> al= new ArrayList<String>();
+		for(String attr:attr_list) {
+			al.add(attr.toUpperCase());
+		}
+		
+		Element t = publicKey.membership_tree.group.getZr().newRandomElement().getImmutable();
+		Element g_alpha_at = masterKey.g1_alpha.mul(publicKey.g1_a.powZn(t)).getImmutable();
+		Element L = publicKey.g2.powZn(t).getImmutable();
+		HashMap<String, Element> K_i = new HashMap<String, Element>();
+		HashMap<Integer,Element> K_y = new HashMap<Integer, Element>();
+		for(TreeNode node : publicKey.membership_tree.getUserPath(user_id)) {
+			
+			K_y.put(node.y_i, (g_alpha_at.mul(node.g_y_i)).powZn(masterKey.beta.invert()).getImmutable());
+		}
+		for(String attr : al) {
+			byte[] at = attr.getBytes();
+			Element value = publicKey.membership_tree.group.getG1().newElementFromHash(at, 0, at.length).getImmutable();
+			
+			K_i.put(attr, value.powZn(t).getImmutable());
+		}
+		return new PrivateKey(al,K_i,L,K_y);
+	}
+	
+	public static String hardcodedCurveFileDir(String curveFileName) {
+		File curveFile=new File(System.getProperty("user.dir")+"\\src\\main\\java\\"+curveFileName);
+		System.out.println("File Directory = " + curveFile.getAbsolutePath());
+		if(!curveFile.exists()) {
+			curveFile = new File(managerAPI.ConstantForServer.projectDir+"/src/main/java/"+curveFileName);
+		}
+		return curveFile.getAbsolutePath();
+	}
+	
 	public Ciphertext encrypt(PublicKey pk, byte[] msg, String policyString, List<Integer> RL) {
 		MSP_Builder util = new MSP_Builder();
 		BinNode policy = util.createPolicy(policyString);
@@ -88,10 +125,8 @@ public class ReVo_ABE {
 		int num_cols = util.getLongestRow();
 		
 		List<Element> u = new ArrayList<Element>();
-		for (int i=0; i<num_cols; i++) {
-			
+		for (int i=0; i<num_cols; i++) {			
 			Element rand = this.group.getZr().newRandomElement().getImmutable();
-			//System.out.println(rand);
 			u.add(rand);
 		}
 		//shared secret
@@ -122,15 +157,8 @@ public class ReVo_ABE {
 			
 		}
 		Element seed = this.group.getGT().newRandomElement().getImmutable();
-//		System.out.println(msg);
-//		System.out.println(seed.toString());
-//		printBytes(seed.toBytes());
-		
-		
 		Element C = (pk.e_gg_alpha.powZn(s)).mul(seed).getImmutable();
-		return new Ciphertext(policy, C, C_prime, D, C_y, C_i);	
-		
-		
+		return new Ciphertext(policy, C, C_prime, D, C_y, C_i);		
 	}
 	
 	public static void printBytes(byte[] bt) {
@@ -146,10 +174,6 @@ public class ReVo_ABE {
 			System.out.println("This user is in the revocation list.");
 			return null;
 		}
-		
-//		for(int nid: common_y_i) {
-//			System.out.println(nid);
-//		}
 		int y_i = (int) common_y_i.toArray()[0];
 		
 		Element P = this.group.pairing(key.k_y.get(y_i), ctxt.C_prime).getImmutable();

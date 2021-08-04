@@ -1,4 +1,4 @@
-package rpc;
+package managerAPI;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

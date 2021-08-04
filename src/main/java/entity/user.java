@@ -81,7 +81,7 @@ public class user {
 		return lastname;
 	}
 	
-	public String getAttributes() {
+	public String getAttributesString() {
 		StringBuilder sb = new StringBuilder();
 		for(String attr:attributes) {
 			sb.append(attr);
@@ -91,6 +91,10 @@ public class user {
 			return "";
 		}
 		return sb.substring(0, sb.length()-1);
+	}
+	
+	public List<String> getAttributes(){
+		return this.attributes;
 	}
 	
 	public int getUserID() {

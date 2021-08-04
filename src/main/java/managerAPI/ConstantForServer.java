@@ -1,4 +1,4 @@
-package rpc;
+package managerAPI;
 
 public class ConstantForServer {
 

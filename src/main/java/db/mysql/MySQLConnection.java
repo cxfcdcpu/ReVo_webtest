@@ -104,7 +104,7 @@ public class MySQLConnection implements DBConnection{
 				PreparedStatement stmt = conn.prepareStatement(sql);
 				stmt.setString(1, us.getUsername());
 				stmt.setString(2, us.getPassword());
-				stmt.setString(3, us.getAttributes());
+				stmt.setString(3, us.getAttributesString());
 				stmt.setString(4, us.getFirstname());
 				stmt.setString(5, us.getLastname());
 				stmt.executeUpdate();
@@ -127,7 +127,8 @@ public class MySQLConnection implements DBConnection{
 	@Override
 	public boolean insertMission(mission ms) {
 		// TODO Auto-generated method stub
-		String sql = "INSERT INTO mission (missionName,missionCode,startTime,endTime,capacity,g1_alpha,beta,g1,g2,g2_beta,e_gg_alpha,g1_a)"
+		String sql = "INSERT INTO mission (missionName,missionCode,startTime,"
+				+ "endTime,capacity,g1_alpha,beta,g1,g2,g2_beta,e_gg_alpha,g1_a)"
 				+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
 		try {
 			mission curMission1 = searchMission(ms.getMissionName());
@@ -214,7 +215,7 @@ public class MySQLConnection implements DBConnection{
 
 	@Override
 	public List<MissionInfo> getAllMissions() {
-		String sql = "SELECT * FROM mission";
+		String sql = "SELECT * FROM mission;";
 		List<MissionInfo> res = new ArrayList<MissionInfo>();
 		try {
 			Statement stmt = conn.createStatement();
@@ -232,7 +233,7 @@ public class MySQLConnection implements DBConnection{
 	
 	@Override
 	public List<user> getAllUsers() {
-		String sql = "SELECT * FROM user";
+		String sql = "SELECT * FROM user;";
 		List<user> res = new ArrayList<user>();
 		try {
 			Statement stmt = conn.createStatement();
@@ -251,9 +252,10 @@ public class MySQLConnection implements DBConnection{
 	@Override
 	public boolean deleteUser(user us) {
 		
-		String sql = "DELETE FROM user WHERE username="+us.getUsername();
+		String sql = "DELETE FROM user WHERE username=?;";
 		try {
 			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, us.getUsername());
 			stmt.executeUpdate();
 			return true;
 
@@ -266,9 +268,10 @@ public class MySQLConnection implements DBConnection{
 
 	@Override
 	public boolean deleteMission(mission ms) {
-		String sql = "DELETE FROM mission WHERE missionName="+ms.getMissionName();
+		String sql = "DELETE FROM mission WHERE missionName=?;";
 		try {
 			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, ms.getMissionName());
 			stmt.executeUpdate();
 			return true;
 
@@ -283,14 +286,14 @@ public class MySQLConnection implements DBConnection{
 	public boolean updateUser(user us) {
 		String sql = "UPDATE user SET username = ?, password = ?,"
 					+" attributes = ?, firstname = ?, lastname = ?"
-					+"WHERE userID= ?";
+					+"WHERE userID= ?;";
 				
 		try {
 			
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, us.getUsername());
 			stmt.setString(2, us.getPassword());
-			stmt.setString(3, us.getAttributes());
+			stmt.setString(3, us.getAttributesString());
 			stmt.setString(4, us.getFirstname());
 			stmt.setString(5, us.getLastname());
 			stmt.setInt(6, us.getUserID());
@@ -311,7 +314,7 @@ public class MySQLConnection implements DBConnection{
 		String sql = "UPDATE mission SET missionName = ?, missionCode = ?, "
 					+"startTime = ?, endTime = ?, capacity = ?, g1_alpha = ?,"
 					+" beta = ?, g1 = ?, g2 = ?, g2_beta = ?, e_gg_alpha = ?,"
-					+" g1_a = ? WHERE missionID = ?";
+					+" g1_a = ? WHERE missionID = ?;";
 				//"UPDATE mission (missionName,missionCode,startTime,endTime,capacity,g1_alpha,beta,g1,g2,g2_beta,e_gg_alpha,g1_a)"
 				
 		try {
@@ -341,19 +344,71 @@ public class MySQLConnection implements DBConnection{
 
 	@Override
 	public boolean insertMatch(Match mc) {
-		// TODO Auto-generated method stub
+		String sql ="INSERT INTO match (missionID,userID,registerationTime,"
+				+ "L,attributes,attrSizes,k_is,revoNodes,revoNodeSize,k_ys)"
+				+ " VALUES (?,?,?,?,?,?,?,?,?,?);";
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, mc.getMissionID());
+			stmt.setInt(2, mc.getUserID());
+			stmt.setTimestamp(3, mc.getRegisterationTime());
+			stmt.setBytes(4, mc.getL());
+			stmt.setString(5, mc.getAttributesString());
+			stmt.setString(6, mc.getAttrSizesString());
+			stmt.setBytes(7, mc.getKIs());
+			stmt.setString(8, mc.getReVoNodesString());
+			stmt.setString(9, mc.getReVoNodeSizesString());
+			stmt.setBytes(10, mc.getKYs());
+			stmt.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 
 	@Override
 	public boolean deleteMatch(Match mc) {
-		// TODO Auto-generated method stub
+		String sql = "DELETE FROM match WHERE missionID="
+					+mc.getMissionID()+","+" userID="+mc.getUserID()+";";
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return false;
 	}
 
 	@Override
 	public boolean updateMatch(Match mc) {
-		// TODO Auto-generated method stub
+		String sql ="UPDATE match (missionID,userID,registerationTime,"
+				+ "L,attributes,attrSizes,k_is,revoNodes,revoNodeSize,k_ys)"
+				+ " VALUES (?,?,?,?,?,?,?,?,?,?);";
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, mc.getMissionID());
+			stmt.setInt(2, mc.getUserID());
+			stmt.setTimestamp(3, mc.getRegisterationTime());
+			stmt.setBytes(4, mc.getL());
+			stmt.setString(5, mc.getAttributesString());
+			stmt.setString(6, mc.getAttrSizesString());
+			stmt.setBytes(7, mc.getKIs());
+			stmt.setString(8, mc.getReVoNodesString());
+			stmt.setString(9, mc.getReVoNodeSizesString());
+			stmt.setBytes(10, mc.getKYs());
+			stmt.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 
