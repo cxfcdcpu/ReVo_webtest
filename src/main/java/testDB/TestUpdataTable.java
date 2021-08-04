@@ -19,11 +19,11 @@ public class TestUpdataTable {
 		else
 			System.out.println("there is no match");
 		
-		curMission.setMissionName("updated1 dog house");
+		curMission.setMissionName("updated2 dog house");
 		connection.updateMission(curMission);
-		curUser.setUserName("updated1 d1");
+		curUser.setUserName("updated2 d1");
 		connection.updateUser(curUser);
-		curMatch.setUserTreeID(2);
+		curMatch.setUserTreeID(3);
 		connection.updateMatch(curMatch);
 		
 		

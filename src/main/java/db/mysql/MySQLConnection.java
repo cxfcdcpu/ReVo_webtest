@@ -432,22 +432,24 @@ public class MySQLConnection implements DBConnection{
 
 	@Override
 	public boolean updateMatch(Match mc) {
-		String sql ="UPDATE `match` (missionID,userID,registerationTime,"
-				+ "L,attributes,attrSizes,k_is,revoNodes,revoNodeSize,k_ys,"
-				+ "user_tree_id) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+		String sql ="UPDATE `match` SET "
+				+ "registerationTime = ?, L = ?, attributes = ?, "
+				+ "attrSizes = ?, k_is = ?, revoNodes = ?, "
+				+ "revoNodeSize = ?,k_ys = ?, user_tree_id = ?"
+				+ " WHERE missionID =? AND userID =?;";
 		try {
 			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, mc.getMissionID());
-			stmt.setInt(2, mc.getUserID());
-			stmt.setTimestamp(3, mc.getRegisterationTime());
-			stmt.setBytes(4, mc.getL());
-			stmt.setString(5, mc.getAttributesString());
-			stmt.setString(6, mc.getAttrSizesString());
-			stmt.setBytes(7, mc.getKIs());
-			stmt.setString(8, mc.getReVoNodesString());
-			stmt.setString(9, mc.getReVoNodeSizesString());
-			stmt.setBytes(10, mc.getKYs());
-			stmt.setInt(11, mc.getUserTreeID());
+			stmt.setInt(10, mc.getMissionID());
+			stmt.setInt(11, mc.getUserID());
+			stmt.setTimestamp(1, mc.getRegisterationTime());
+			stmt.setBytes(2, mc.getL());
+			stmt.setString(3, mc.getAttributesString());
+			stmt.setString(4, mc.getAttrSizesString());
+			stmt.setBytes(5, mc.getKIs());
+			stmt.setString(6, mc.getReVoNodesString());
+			stmt.setString(7, mc.getReVoNodeSizesString());
+			stmt.setBytes(8, mc.getKYs());
+			stmt.setInt(9, mc.getUserTreeID());
 			stmt.executeUpdate();
 			return true;
 
@@ -456,6 +458,18 @@ public class MySQLConnection implements DBConnection{
 		}
 		
 		return false;
+	}
+
+	@Override
+	public List<user> getUsersForMission(String missionName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<mission> getMissionsForUser(String userName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

@@ -77,6 +77,11 @@ public class mission {
 	public void setMissionCode(String code) {
 		this.missionCode = code;
 	}
+	
+	public void setMissionCapacity(int capacity) {
+		this.capacity = capacity;
+	}
+	
 	public void setStartTime(Timestamp startTime) {
 		this.startTime = startTime;
 	}

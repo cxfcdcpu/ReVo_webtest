@@ -44,4 +44,8 @@ public interface DBConnection {
 	
 	public Match searchMatch(String ms, String us);
 	
+	public List<user> getUsersForMission(String missionName);
+	
+	public List<mission> getMissionsForUser(String userName);
+	
 }
