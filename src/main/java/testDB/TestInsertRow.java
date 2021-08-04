@@ -1,4 +1,4 @@
-package test;
+package testDB;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,6 +33,10 @@ public class TestInsertRow {
 		
 		mission ms = new mission("dog house", 10);
 		connection.insertMission(ms);
+		
+		
+		ms = connection.searchMission(ms.getMissionName());
+		us = connection.searchUser(us.getUsername());
 		
 		Match mc = new Match(ms, us, 1);
 		connection.insertMatch(mc);

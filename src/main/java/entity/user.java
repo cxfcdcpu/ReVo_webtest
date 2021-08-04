@@ -43,6 +43,10 @@ public class user {
 		this.userID=id;
 	}
 	
+	public void setUserName(String userName) {
+		this.username= userName;
+	}
+	
 	public void setFirstname(String first) {
 		this.firstname = first;
 	}
@@ -58,6 +62,10 @@ public class user {
 		for(String attr: attrs.split(",")) {
 			this.addAttributes(attr);
 		}
+	}
+	
+	public void setRegisterTime(Timestamp ts) {
+		this.registerationTime = ts;
 	}
 	
 	

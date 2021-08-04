@@ -63,32 +63,36 @@ public class MySQLConnection implements DBConnection{
 
 	}
 
+
+	
 	@Override
-	public user searchUser(String username) {
-		// TODO Auto-generated method stub
-		String sql = "SELECT * FROM user WHERE username = '"+username+"';";
+	public boolean insertMatch(Match mc) {
+		String sql ="INSERT INTO `match` (missionID,userID,registerationTime,"
+				+ "L,attributes,attrSizes,k_is,revoNodes,revoNodeSize,k_ys, user_tree_id)"
+				+ " VALUES (?,?,?,?,?,?,?,?,?,?,?);";
 		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next()) {
-				user curUser = new user(rs.getString("username"),rs.getString("password")
-						);
-				curUser.setAttributes(rs.getString("attributes"));
-				curUser.setUserID(rs.getInt("userID"));
-				//curUser.setFirstname("first");
-				//curUser.setLastname("Last");
-				return curUser;
-			}
-			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, mc.getMissionID());
+			stmt.setInt(2, mc.getUserID());
+			stmt.setTimestamp(3, mc.getRegisterationTime());
+			stmt.setBytes(4, mc.getL());
+			stmt.setString(5, mc.getAttributesString());
+			stmt.setString(6, mc.getAttrSizesString());
+			stmt.setBytes(7, mc.getKIs());
+			stmt.setString(8, mc.getReVoNodesString());
+			stmt.setString(9, mc.getReVoNodeSizesString());
+			stmt.setBytes(10, mc.getKYs());
+			stmt.setInt(11, mc.getUserTreeID());
+			System.out.println(stmt);
+			stmt.executeUpdate();
+			return true;
+
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return null;
+		return false;
 	}
-	
-	
 	
 
 	@Override
@@ -163,6 +167,64 @@ public class MySQLConnection implements DBConnection{
 	}
 
 	@Override
+	public Match searchMatch(String missionName, String userName) {
+		
+		mission curMission = this.searchMission(missionName);
+		user curUser = this.searchUser(userName);
+		
+		if(curMission != null && curUser != null) {
+			String sql = "SELECT * FROM `match` WHERE missionID = "
+						+curMission.getMissionID()+ " AND userID = "
+						+curUser.getUserID()+";";
+			
+			try {
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql);
+				while(rs.next()) {
+					Match curMatch = new Match(curMission,curUser, rs.getInt("user_tree_id"));
+					curMatch.assignPrivateKey(rs.getBytes("L"), 
+							rs.getString("attributes"), rs.getString("attrSizes"), 
+							rs.getBytes("k_is"), rs.getString("revoNodes"),
+							rs.getString("revoNodeSize"), rs.getBytes("k_ys"));
+					return curMatch;
+				}
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		return null;
+	}
+	
+	
+	@Override
+	public user searchUser(String username) {
+		// TODO Auto-generated method stub
+		String sql = "SELECT * FROM user WHERE username = '"+username+"';";
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				user curUser = new user(rs.getString("username"),rs.getString("password")
+						);
+				curUser.setAttributes(rs.getString("attributes"));
+				curUser.setUserID(rs.getInt("userID"));
+				curUser.setFirstname(rs.getString("firstname"));
+				curUser.setLastname(rs.getString("lastname"));
+				curUser.setRegisterTime(rs.getTimestamp("registerTime"));
+				return curUser;
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	@Override
 	public mission searchMission(String missionName) {
 		// TODO Auto-generated method stub
 		
@@ -173,10 +235,12 @@ public class MySQLConnection implements DBConnection{
 			while(rs.next()) {
 				mission curMission = new mission(rs.getString("missionName"),rs.getInt("capacity")
 						);
+				curMission.setMissionID(rs.getInt("missionID"));
 				curMission.setMissionCode(rs.getString("missionCode"));
 				curMission.setStartTime(rs.getTimestamp("startTime"));
 				curMission.setEndTime(rs.getTimestamp("endTime"));
-				
+				curMission.setupPublicKey(rs.getBytes("g1"), rs.getBytes("g2"), rs.getBytes("g2_beta"), rs.getBytes("g1_a"), rs.getBytes("e_gg_alpha"));
+				curMission.setupMasterKey(rs.getBytes("beta"),rs.getBytes("g1_alpha"));
 				return curMission;
 			}
 			
@@ -187,6 +251,8 @@ public class MySQLConnection implements DBConnection{
 		
 		return null;
 	}
+	
+	
 
 	@Override
 	public mission searchMissionByCode(String missionCode) {
@@ -198,10 +264,12 @@ public class MySQLConnection implements DBConnection{
 			while(rs.next()) {
 				mission curMission = new mission(rs.getString("missionName"),rs.getInt("capacity")
 						);
+				curMission.setMissionID(rs.getInt("missionID"));
 				curMission.setMissionCode(rs.getString("missionCode"));
 				curMission.setStartTime(rs.getTimestamp("startTime"));
 				curMission.setEndTime(rs.getTimestamp("endTime"));
 				curMission.setupPublicKey(rs.getBytes("g1"), rs.getBytes("g2"), rs.getBytes("g2_beta"), rs.getBytes("g1_a"), rs.getBytes("e_gg_alpha"));
+				curMission.setupMasterKey(rs.getBytes("beta"),rs.getBytes("g1_alpha"));
 				return curMission;
 			}
 			
@@ -281,6 +349,22 @@ public class MySQLConnection implements DBConnection{
 
 		return false;
 	}
+	
+	@Override
+	public boolean deleteMatch(Match mc) {
+		String sql = "DELETE FROM `match` WHERE missionID="
+					+mc.getMissionID()+" AND"+" userID="+mc.getUserID()+";";
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
 
 	@Override
 	public boolean updateUser(user us) {
@@ -342,54 +426,15 @@ public class MySQLConnection implements DBConnection{
 		return false;
 	}
 
-	@Override
-	public boolean insertMatch(Match mc) {
-		String sql ="INSERT INTO match (missionID,userID,registerationTime,"
-				+ "L,attributes,attrSizes,k_is,revoNodes,revoNodeSize,k_ys)"
-				+ " VALUES (?,?,?,?,?,?,?,?,?,?);";
-		try {
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, mc.getMissionID());
-			stmt.setInt(2, mc.getUserID());
-			stmt.setTimestamp(3, mc.getRegisterationTime());
-			stmt.setBytes(4, mc.getL());
-			stmt.setString(5, mc.getAttributesString());
-			stmt.setString(6, mc.getAttrSizesString());
-			stmt.setBytes(7, mc.getKIs());
-			stmt.setString(8, mc.getReVoNodesString());
-			stmt.setString(9, mc.getReVoNodeSizesString());
-			stmt.setBytes(10, mc.getKYs());
-			stmt.executeUpdate();
-			return true;
+	
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return false;
-	}
 
-	@Override
-	public boolean deleteMatch(Match mc) {
-		String sql = "DELETE FROM match WHERE missionID="
-					+mc.getMissionID()+","+" userID="+mc.getUserID()+";";
-		try {
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.executeUpdate();
-			return true;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return false;
-	}
 
 	@Override
 	public boolean updateMatch(Match mc) {
-		String sql ="UPDATE match (missionID,userID,registerationTime,"
-				+ "L,attributes,attrSizes,k_is,revoNodes,revoNodeSize,k_ys)"
-				+ " VALUES (?,?,?,?,?,?,?,?,?,?);";
+		String sql ="UPDATE `match` (missionID,userID,registerationTime,"
+				+ "L,attributes,attrSizes,k_is,revoNodes,revoNodeSize,k_ys,"
+				+ "user_tree_id) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
 		try {
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, mc.getMissionID());
@@ -402,6 +447,7 @@ public class MySQLConnection implements DBConnection{
 			stmt.setString(8, mc.getReVoNodesString());
 			stmt.setString(9, mc.getReVoNodeSizesString());
 			stmt.setBytes(10, mc.getKYs());
+			stmt.setInt(11, mc.getUserTreeID());
 			stmt.executeUpdate();
 			return true;
 
@@ -412,11 +458,7 @@ public class MySQLConnection implements DBConnection{
 		return false;
 	}
 
-	@Override
-	public Match searchMatch(mission ms, user us) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 	
 	
 

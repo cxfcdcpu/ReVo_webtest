@@ -69,6 +69,11 @@ public class mission {
 	public void setMissionID(int id) {
 		this.missionID=id;
 	}
+	
+	public void setMissionName(String missionName) {
+		this.missionName = missionName;
+	}
+	
 	public void setMissionCode(String code) {
 		this.missionCode = code;
 	}
@@ -94,9 +99,22 @@ public class mission {
 		e_gg_alpha = pk.getE_gg_alpha();
 	}
 	
+	public void setupPublicKey(byte[] vg1, byte[] vg2, byte[] vg2_beta, byte[] vg1_a, byte[] ve_gg_alpha) {
+		g1 = vg1;
+		g2 = vg2;
+		g2_beta = vg2_beta;
+		g1_a = vg1_a;
+		e_gg_alpha = ve_gg_alpha;
+	}
+	
 	public void setupMasterKey(MasterKey mk) {
 		beta = mk.getBeta();
 		g1_alpha = mk.getG1_alpha();
+	}
+	
+	public void setupMasterKey(byte[] bt, byte[] g1a) {
+		beta = bt;
+		g1_alpha = g1a;
 	}
 	
 	public String getMissionName() {
@@ -149,13 +167,7 @@ public class mission {
 		return this.missionID;
 	}
 	
-	public void setupPublicKey(byte[] vg1, byte[] vg2, byte[] vg2_beta, byte[] vg1_a, byte[] ve_gg_alpha) {
-		g1 = vg1;
-		g2 = vg2;
-		g2_beta = vg2_beta;
-		g1_a = vg1_a;
-		e_gg_alpha = ve_gg_alpha;
-	}
+
 	
 	public MasterKey getMasterKey() {
 		Pairing group = PairingFactory.getPairing(this.curveFileDir);

@@ -1,6 +1,7 @@
 package entity;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,10 +19,10 @@ public class Match {
 	private Timestamp registerationTime;
 	private byte[] L;
 	private List<String> attributes;
-	private List<Integer> attrSizes;
+	private List<String> attrSizes;
 	private byte[] k_is;
 	private List<String> revoNodes;
-	private List<Integer> revoNodeSizes;
+	private List<String> revoNodeSizes;
 	private byte[] k_ys;
 	
 	public Match(mission m, user u, int treeID) {
@@ -48,6 +49,12 @@ public class Match {
 	public void setTimestamp(Timestamp ts) {
 		this.registerationTime = ts;
 	}
+	
+	public void setUserTreeID(int nID) {
+		this.user_tree_id = nID;
+		this.keyGen();
+	}
+	
 
 	public void assignPrivateKey(PrivateKey pk) {
 		if (pk == null) {
@@ -69,12 +76,29 @@ public class Match {
 		this.k_ys = pk.getKYs();
 	}
 	
+	
+	public void assignPrivateKey(byte[] l, String attrs, String attrSizes, byte[] kis, String nodes, String nodeSizes, byte[] kys) {
+		this.L = l;
+		this.k_is = kis;
+		this.k_ys = kys;
+		this.attributes = Match.stringToStringList(attrs);
+		this.attrSizes = Match.stringToStringList(attrSizes);
+		this.revoNodes = Match.stringToStringList(nodes);
+		this.revoNodeSizes = Match.stringToStringList(nodeSizes);
+		
+	}
+	
+	
 	public int getMissionID() {
 		return this.ms.getMissionID();
 	}
 	
 	public int getUserID() {
 		return this.ur.getUserID();
+	}
+	
+	public int getUserTreeID(){
+		return this.user_tree_id;
 	}
 	
 	public byte[] getL() {
@@ -89,17 +113,12 @@ public class Match {
 		return String.join(",", this.attributes);
 	}
 	
-	public List<Integer> attrSizes(){
+	public List<String> attrSizes(){
 		return this.attrSizes;
 	}
 	
 	public String getAttrSizesString() {
-		String ret = "";
-		for(int size : this.attrSizes) {
-			ret+=size;
-			ret+=",";
-		}
-		return ret.substring(0, ret.length()-1);
+		return String.join(",", this.attrSizes);
 	}
 	
 	public byte[] getKIs() {
@@ -114,17 +133,13 @@ public class Match {
 		return String.join(",", this.revoNodes);
 	}
 	
-	public List<Integer> getReVoNodeSizes(){
+	public List<String> getReVoNodeSizes(){
 		return this.revoNodeSizes;
 	}
 	
 	public String getReVoNodeSizesString() {
-		String ret = "";
-		for(int size: this.revoNodeSizes) {
-			ret+=size;
-			ret+=",";
-		}
-		return ret.substring(0, ret.length()-1);
+
+		return String.join(",", this.revoNodeSizes);
 	}
 	
 	public byte[] getKYs() {
@@ -134,4 +149,16 @@ public class Match {
 	public Timestamp getRegisterationTime() {
 		return this.registerationTime;
 	}
+	
+	public static List<String> stringToStringList(String str){
+		return Arrays.asList(str.split(","));
+	}
+	
+	public void printMatch() {
+		System.out.println("Mission: "+this.ms.getMissionName());
+		System.out.println("User: "+this.ur.getUsername());
+	}
+	
+
+	
 }

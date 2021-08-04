@@ -45,16 +45,17 @@ public class PrivateKey {
 		return this.k_y;
 	}
 	
-	public List<Integer> getAttrSizes(){
-		List<Integer> ret = new ArrayList<Integer>();
+	public List<String> getAttrSizes(){
+		List<String> ret = new ArrayList<String>();
 		for(String attr: attr_list) {
-			ret.add(k_i.get(attr).toBytes().length);
+			ret.add(k_i.get(attr).toBytes().length+"");
 		}
 		return ret;
 	}
 	public int getKISize() {
 		int ret = 0;
-		for(int size : this.getAttrSizes()) {
+		for(String sizeStr : this.getAttrSizes()) {
+			int size = Integer.parseInt(sizeStr);
 			ret+=size;
 		}
 		return ret;
@@ -77,17 +78,18 @@ public class PrivateKey {
 		return ret;
 	}
 	
-	public List<Integer> getReVoNodeSizes(){
-		List<Integer> ret = new ArrayList<Integer>();
+	public List<String> getReVoNodeSizes(){
+		List<String> ret = new ArrayList<String>();
 		for(String node : this.getReVoNodes()) {
-			ret.add(this.k_y.get(Integer.parseInt(node)).toBytes().length);
+			ret.add(this.k_y.get(Integer.parseInt(node)).toBytes().length+"");
 		}
 		return ret;
 	}
 	
 	public int getKYSize() {
 		int ret = 0;
-		for(int size : this.getReVoNodeSizes()) {
+		for(String sizeStr : this.getReVoNodeSizes()) {
+			int size = Integer.parseInt(sizeStr);
 			ret+=size;
 		}
 		return ret;

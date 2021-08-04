@@ -1,4 +1,4 @@
-package test;
+package testDB;
 import db.*;
 import db.mysql.*;
 import entity.user;

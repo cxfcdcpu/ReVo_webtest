@@ -42,6 +42,6 @@ public interface DBConnection {
 	
 	public boolean updateMatch(Match mc);
 	
-	public Match searchMatch(mission ms, user us);
+	public Match searchMatch(String ms, String us);
 	
 }
