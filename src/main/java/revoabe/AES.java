@@ -1,4 +1,4 @@
-package aes;
+package revoabe;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -46,7 +46,12 @@ public class AES {
             byte[] cat_msg = ByteBuffer.allocate(secret.length+msg_ct.length).put(secret).put(msg_ct).array();
             sha = MessageDigest.getInstance("SHA-224");
             byte[] VK = sha.digest(cat_msg);
+            
+            
             byte[] ret = ByteBuffer.allocate(VK.length+msg_ct.length).put(VK).put(msg_ct).array();
+            
+            //System.out.println(String.format("%d, %d, %d, %d", msg_ct.length,cat_msg.length,VK.length,ret.length));
+            
             return ret;
         } 
         catch (Exception e) 
@@ -61,8 +66,8 @@ public class AES {
     	MessageDigest sha = null;
         try
         {
-        	byte[] VK = Arrays.copyOfRange(dataToDecrypt, 0, 224);
-        	byte[] msg_ct = Arrays.copyOfRange(dataToDecrypt, 224,dataToDecrypt.length);        	
+        	byte[] VK = Arrays.copyOfRange(dataToDecrypt, 0, 28);
+        	byte[] msg_ct = Arrays.copyOfRange(dataToDecrypt, 28,dataToDecrypt.length);        	
             byte[] cat_msg = ByteBuffer.allocate(secret.length+msg_ct.length).put(secret).put(msg_ct).array();
             
             
@@ -70,13 +75,13 @@ public class AES {
             if(!Arrays.equals(VK,sha.digest(cat_msg))) {
             	return null;
             }
-        	
+        	//System.out.println("verification succeed");
         	SecretKeySpec secretKey = setKey(secret);
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
 
             
-            return cipher.doFinal(Base64.getDecoder().decode(msg_ct));
+            return cipher.doFinal(msg_ct);
         } 
         catch (Exception e) 
         {

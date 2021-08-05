@@ -14,16 +14,17 @@ public class Ciphertext {
 	Element D;
 	HashMap<Integer, Element> C_y;
 	HashMap<String, Element> C_i;
-	
+	byte[] ciphertext;
 	
 	public Ciphertext(BinNode policy, Element C, Element C_prime,Element D, 
-			HashMap<Integer, Element> C_y, HashMap<String, Element> C_i) {
+			HashMap<Integer, Element> C_y, HashMap<String, Element> C_i, byte[] aes_ci) {
 		this.policy = policy;
 		this.C = C;
 		this.C_prime = C_prime;
 		this.D = D;
 		this.C_y = C_y;
 		this.C_i = C_i;
+		this.ciphertext = aes_ci;
 	}
 	
 	public HashMap<Integer, Element> getCy(){

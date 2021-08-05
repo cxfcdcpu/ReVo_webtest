@@ -45,11 +45,31 @@ public class TestReVoABE_encrypt {
 		List<Integer> RL = new ArrayList<Integer>();
 		RL.add(7);
 		
-		byte[] msg = "What messagea is good>?".getBytes();
-		testABE.printBytes(msg);
+		String msg = "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret"
+				+ "This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret,This suppose to be secret";
+		//System.out.println(msg);
 		
-		Ciphertext ctxt = testABE.encrypt(pk, msg, "(a and b) or (b and c)", RL);
-		testABE.printBytes(testABE.decrypt(pk, ctxt, prik).toBytes());
+		Ciphertext ctxt = testABE.encrypt(pk, msg.getBytes(), "(a and b) or (b and c)", RL);
+		System.out.println(new String(testABE.decrypt(pk, ctxt, prik)));
 	}
 	
 	

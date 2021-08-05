@@ -159,7 +159,9 @@ public class ReVo_ABE {
 		}
 		Element seed = this.group.getGT().newRandomElement().getImmutable();
 		Element C = (pk.e_gg_alpha.powZn(s)).mul(seed).getImmutable();
-		return new Ciphertext(policy, C, C_prime, D, C_y, C_i);		
+		byte[] aes_ci = AES.encrypt(msg, seed.toBytes());
+		
+		return new Ciphertext(policy, C, C_prime, D, C_y, C_i,aes_ci);		
 	}
 	
 	public static void printBytes(byte[] bt) {
@@ -168,7 +170,7 @@ public class ReVo_ABE {
 		}
 	}
 	
-	public Element decrypt(PublicKey pk, Ciphertext ctxt, PrivateKey key) {
+	public byte[] decrypt(PublicKey pk, Ciphertext ctxt, PrivateKey key) {
 		HashMap<Integer, Element> Ky = (HashMap<Integer, Element>) key.k_y.clone();
 		Set<Integer> common_y_i = Ky.keySet();
 		if (!common_y_i.retainAll(ctxt.C_y.keySet())) {
@@ -204,7 +206,10 @@ public class ReVo_ABE {
 		
 		Element W = P.div((Q.mul(this.group.pairing(prodC_i, key.L)).mul(this.group.pairing(prodK_i, ctxt.D))));
 		Element seed = ctxt.C.div(W);
-		return seed;
+		
+		
+		
+		return AES.decrypt(ctxt.ciphertext, seed.toBytes());
 	}
 	
 	
