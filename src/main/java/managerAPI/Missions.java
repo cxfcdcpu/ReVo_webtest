@@ -51,7 +51,7 @@ public class Missions extends HttpServlet {
 			if(curMission!=null&&curMission.size()!=0) {
 				//System.out.println(gson.toJson(curMission));
 
-				RpcHelper.writeJsonString(response, gson.toJson(curMission));
+				HelperFunctions.writeJsonString(response, gson.toJson(curMission));
 				System.out.println("write response successfully");
 				//os.close();
 			}else {

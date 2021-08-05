@@ -38,14 +38,14 @@ public class UpdateMission extends HttpServlet {
 		OutputStream os = response.getOutputStream();
 		DBConnection conn = DBConnectionFactory.getConnection();
 		try {
-				JSONObject input = RpcHelper.readJsonObject(request);
+				JSONObject input = HelperFunctions.readJsonObject(request);
 				String missionName = input.getString("OldMissionName").trim();
 				String newMissionName = input.getString("NewMissionName").trim();
 				int capacity = input.getInt("capacity");
 				String startTime = input.getString("startTime").trim();
 				String endTime = input.getString("endTime").trim();
-				Timestamp ts_startTime = RpcHelper.convertStringToTimestamp(startTime);
-				Timestamp ts_endTime = RpcHelper.convertStringToTimestamp(endTime);
+				Timestamp ts_startTime = HelperFunctions.convertStringToTimestamp(startTime);
+				Timestamp ts_endTime = HelperFunctions.convertStringToTimestamp(endTime);
 				System.out.println(String.format("%s,%d,%s,%s",missionName,capacity,startTime,endTime));
 				
 				mission curMission = new mission(newMissionName,capacity,ts_startTime,ts_endTime);

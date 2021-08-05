@@ -53,7 +53,7 @@ public class Bootstrap extends HttpServlet {
 		OutputStream os = response.getOutputStream();
 		DBConnection conn = DBConnectionFactory.getConnection();
 		try {
-				JSONObject input = RpcHelper.readJsonObject(request);
+				JSONObject input = HelperFunctions.readJsonObject(request);
 				String username = input.getString("username").trim();
 				String password = input.getString("password").trim();
 				String missionCode = input.getString("missionCode").trim();

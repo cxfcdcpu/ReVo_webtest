@@ -462,8 +462,21 @@ public class MySQLConnection implements DBConnection{
 
 	@Override
 	public List<user> getUsersForMission(String missionName) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		String sql = "SELECT userID FROM `match` WHERE missionID=;";
+		List<user> res = new ArrayList<user>();
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				res.add(new user(rs.getString("username"),rs.getString("firstname"),rs.getString("lastname")));
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return res;
 	}
 
 	@Override

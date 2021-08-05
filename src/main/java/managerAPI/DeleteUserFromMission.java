@@ -39,7 +39,7 @@ public class DeleteUserFromMission extends HttpServlet {
 		OutputStream os = response.getOutputStream();
 		DBConnection conn = DBConnectionFactory.getConnection();
 		try {
-				JSONObject input = RpcHelper.readJsonObject(request);
+				JSONObject input = HelperFunctions.readJsonObject(request);
 				String missionName = input.getString("missionName").trim();
 				String userName = input.getString("userName").trim();
 

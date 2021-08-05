@@ -47,6 +47,10 @@ public class user {
 		this.username= userName;
 	}
 	
+	public void setPassword(String pw) {
+		this.password = pw;
+	}
+	
 	public void setFirstname(String first) {
 		this.firstname = first;
 	}
@@ -59,6 +63,7 @@ public class user {
 	}
 	
 	public void setAttributes(String attrs) {
+		this.attributes.clear();
 		for(String attr: attrs.split(",")) {
 			this.addAttributes(attr);
 		}

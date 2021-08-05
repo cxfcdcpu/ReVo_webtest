@@ -8,14 +8,16 @@ import java.nio.ByteOrder;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-public class RpcHelper {
+public class HelperFunctions {
 	public static JSONObject readJsonObject(HttpServletRequest request) {
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -83,6 +85,9 @@ public class RpcHelper {
 		return "this is a dummy public key";
 	}
 	
+	public static List<String> stringToStringList(String str){
+		return Arrays.asList(str.split(","));
+	}
 
 	
 }

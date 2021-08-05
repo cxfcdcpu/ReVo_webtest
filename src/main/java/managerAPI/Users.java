@@ -46,7 +46,7 @@ public class Users extends HttpServlet {
 			if(curUsers!=null&&curUsers.size()!=0) {
 				//System.out.println(gson.toJson(curUsers));
 
-				RpcHelper.writeJsonString(response, gson.toJson(curUsers));
+				HelperFunctions.writeJsonString(response, gson.toJson(curUsers));
 				System.out.println("write response successfully");
 				//os.close();
 			}else {
