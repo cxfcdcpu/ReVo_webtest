@@ -1,5 +1,7 @@
 package entity;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -158,7 +160,47 @@ public class Match {
 		System.out.println("Mission: "+this.ms.getMissionName());
 		System.out.println("User: "+this.ur.getUsername());
 	}
+
+	//	The following data are private keys
+	//	private byte[] L;
+	//	private List<String> attributes;
+	//	private List<String> attrSizes;
+	//	private byte[] k_is;
+	//	private List<String> revoNodes;
+	//	private List<String> revoNodeSizes;
+	//	private byte[] k_ys;
+	public byte[] toPrivateKeyByteArray() {
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		
+		try {
+			os.write(EntityHelper.int_to_bytes(L.length));
+			os.write(L);
+			os.write(EntityHelper.stringList_to_bytes(attributes));
+			os.write(EntityHelper.stringList_to_bytes(attrSizes));
+			os.write(EntityHelper.int_to_bytes(k_is.length));
+			os.write(k_is);
+			os.write(EntityHelper.stringList_to_bytes(revoNodes));
+			os.write(EntityHelper.stringList_to_bytes(revoNodeSizes));
+			os.write(EntityHelper.int_to_bytes(k_ys.length));
+			os.write(k_ys);
+		} catch (IOException e) {
+			e.printStackTrace();
+			
+		}		
+		return os.toByteArray();		
+	}
 	
+	//	The following are privatekey format
+	//	List<String> attr_list; //List of attributes
+	//	Element L; //An element of the pairing group
+	//	HashMap<String,Element> k_i; //Map of valid attributes and element
+	//	HashMap<Integer,Element> k_y;//Map of valid memberID and element
+	//	Function to convert match key types to privatekey types
+	public PrivateKey getPrivateKey() {
+		
+		
+		return null;
+	}
 
 	
 }

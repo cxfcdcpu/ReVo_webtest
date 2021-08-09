@@ -22,7 +22,8 @@ public class TestReVoABE_encrypt {
 		Pairing pairing = PairingFactory.getPairing("./src/main/java/a.properties");
 		PairingFactory.getInstance().setUsePBCWhenPossible(true);
 		int nodecount = 10;
-		ReVo_ABE testABE = new ReVo_ABE(pairing, nodecount);
+		long missionCode = 12345;
+		ReVo_ABE testABE = new ReVo_ABE(pairing, nodecount,missionCode);
 		
 		List<String> attr_list= new ArrayList<String>();
 		attr_list.add("a");
@@ -30,7 +31,7 @@ public class TestReVoABE_encrypt {
 		attr_list.add("C");
 		attr_list.add("d");
 		int user_id = 3;
-		PrivateKey prik = testABE.keygen(attr_list, user_id);
+		PrivateKey prik = testABE.keyGen(attr_list, user_id);
 		//System.out.println(prik);
 		//prik.printPrivateKey();
 

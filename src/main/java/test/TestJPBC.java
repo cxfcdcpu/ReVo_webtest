@@ -27,7 +27,7 @@ public class TestJPBC {
 		attr_list.add("phd");
 		attr_list.add("master");
 		int user_id = 3;
-		PrivateKey prik = testABE.keygen(attr_list, user_id);
+		PrivateKey prik = testABE.keyGen(attr_list, user_id);
 		System.out.println(prik);
 		prik.printPrivateKey();
 

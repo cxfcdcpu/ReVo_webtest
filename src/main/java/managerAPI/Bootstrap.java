@@ -1,6 +1,7 @@
 package managerAPI;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -16,6 +17,8 @@ import org.json.JSONObject;
 
 import db.DBConnection;
 import db.DBConnectionFactory;
+import entity.EntityHelper;
+import entity.Match;
 import entity.mission;
 
 /**
@@ -59,9 +62,20 @@ public class Bootstrap extends HttpServlet {
 				String missionCode = input.getString("missionCode").trim();
 				
 				mission curMission = conn.searchMissionByCode(missionCode);
-				if (conn.verifyLogin(username, password) && curMission !=null) {
+				Match curMatch = null;
+				if (curMission !=null)
+					curMatch = conn.searchMatch(curMission.getMissionName(), username);
+				if (conn.verifyLogin(username, password) && curMatch !=null) {
 					response.setContentType("keys");
-					byte[] res = curMission.toPublicKeyByteArray();
+					
+					byte[] publicKey = curMission.toPublicKeyByteArray();
+					byte[] privateKey = curMatch.toPrivateKeyByteArray();
+					ByteArrayOutputStream bs = new ByteArrayOutputStream();
+					bs.write(EntityHelper.int_to_bytes(publicKey.length));
+					bs.write(publicKey);
+					bs.write(EntityHelper.int_to_bytes(privateKey.length));
+					bs.write(privateKey);
+					byte[] res = bs.toByteArray();
 					response.setContentLength(res.length);
 					os.write(res);
 				}

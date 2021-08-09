@@ -233,13 +233,13 @@ public class MySQLConnection implements DBConnection{
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
-				mission curMission = new mission(rs.getString("missionName"),rs.getInt("capacity")
-						);
+				mission curMission = new mission(rs.getString("missionName"),
+						rs.getInt("capacity"),rs.getString("missionCode"));
 				curMission.setMissionID(rs.getInt("missionID"));
-				curMission.setMissionCode(rs.getString("missionCode"));
 				curMission.setStartTime(rs.getTimestamp("startTime"));
 				curMission.setEndTime(rs.getTimestamp("endTime"));
-				curMission.setupPublicKey(rs.getBytes("g1"), rs.getBytes("g2"), rs.getBytes("g2_beta"), rs.getBytes("g1_a"), rs.getBytes("e_gg_alpha"));
+				curMission.setupPublicKey(rs.getBytes("g1"), rs.getBytes("g2"),
+						rs.getBytes("g2_beta"), rs.getBytes("g1_a"), rs.getBytes("e_gg_alpha"));
 				curMission.setupMasterKey(rs.getBytes("beta"),rs.getBytes("g1_alpha"));
 				return curMission;
 			}

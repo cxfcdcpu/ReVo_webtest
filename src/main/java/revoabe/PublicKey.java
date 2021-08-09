@@ -1,5 +1,6 @@
 package revoabe;
 
+import entity.EntityHelper;
 import it.unisa.dia.gas.jpbc.Element;
 
 public class PublicKey{
@@ -18,6 +19,22 @@ public class PublicKey{
 		g2_beta = gg2_beta;
 		e_gg_alpha = eg_alpha;
 		g1_a = gg1_a;
+	}
+	
+	//	The following is how to change public key of mission to bytes
+	//	os.write(EntityHelper.int_to_bytes(g1.length));
+	//	os.write(g1);
+	//	os.write(EntityHelper.int_to_bytes(g2.length));
+	//	os.write(g2);
+	//	os.write(EntityHelper.int_to_bytes(g1_a.length));
+	//	os.write(g1_a);
+	//	os.write(EntityHelper.int_to_bytes(g2_beta.length));
+	//	os.write(g2_beta);
+	//	os.write(EntityHelper.int_to_bytes(e_gg_alpha.length));
+	//	os.write(e_gg_alpha);
+	//	The next function is to change bytes to public key.
+	public PublicKey(byte[] pkInBytes) {
+		
 	}
 	
 	public void printPublicKey() {
@@ -51,6 +68,7 @@ public class PublicKey{
 	public MembershipTree getMembershipTree() {
 		return membership_tree;
 	}
+
 
 	
 }

@@ -38,6 +38,13 @@ public class mission {
 		this.revo_ABE_setup();
 	}
 	
+	public mission(String missionName, int capacity, String missionCode) {
+		this.missionName = missionName;
+		this.capacity = capacity;
+		this.missionCode = missionCode;
+		this.revo_ABE_setup();
+	}
+	
 	public mission(String missionName, int capacity, Timestamp startTime, Timestamp endTime) {
 		this.missionName = missionName;
 		this.capacity = capacity;
@@ -53,7 +60,7 @@ public class mission {
 		
 		Pairing pairing = PairingFactory.getPairing(this.curveFileDir);
 		PairingFactory.getInstance().setUsePBCWhenPossible(true);
-		ReVo_ABE testABE = new ReVo_ABE(pairing, this.capacity);
+		ReVo_ABE testABE = new ReVo_ABE(pairing, this.capacity,Long.parseLong(missionCode));
 		MasterKey mk = testABE.getMasterKey();
 		PublicKey pk = testABE.getPublicKey();
 		this.setupKeysFromReVo(testABE);
@@ -192,13 +199,12 @@ public class mission {
 	
 	public MembershipTree	getMembershipTree() {
 		Pairing group = PairingFactory.getPairing(this.curveFileDir);
-		return new MembershipTree(this.capacity,group.getG1().newElementFromBytes(this.g1).getImmutable(),group);
+		return new MembershipTree(this.capacity,group.getG1().newElementFromBytes(this.g1).getImmutable(),group,Long.parseLong(missionCode));
 	}
 	
 	
 	public byte[] toPublicKeyByteArray() {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		
 		try {
 			os.write(EntityHelper.int_to_bytes(g1.length));
 			os.write(g1);
@@ -215,9 +221,7 @@ public class mission {
 			e.printStackTrace();
 			
 		}
-		
 		return os.toByteArray();
-		
 	}
 	
 
