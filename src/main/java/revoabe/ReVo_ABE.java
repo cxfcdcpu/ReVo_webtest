@@ -137,7 +137,7 @@ public class ReVo_ABE {
 	public static String hardcodedCurveFileDir(String curveFileName) {
 		File curveFile=new File(System.getProperty("user.dir")+"\\src\\main\\java\\"+curveFileName);
 		
-		System.out.println("File Directory = " + curveFile.getAbsolutePath());
+		//System.out.println("File Directory = " + curveFile.getAbsolutePath());
 		if(!curveFile.exists()) {
 			curveFile = new File(managerAPI.ConstantForServer.projectDir+"/src/main/java/"+curveFileName);
 		}
@@ -324,7 +324,7 @@ public class ReVo_ABE {
 		Element seed = ctxt.C.div(W);
 		
 		
-		
+		System.out.println("To the last step of decrypt for Revo_abe");
 		return AES.decrypt(ctxt.ciphertext, seed.toBytes());
 	}
 	

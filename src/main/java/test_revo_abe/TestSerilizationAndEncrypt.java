@@ -1,7 +1,10 @@
 package test_revo_abe;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.Timestamp;
 
+import entity.EntityHelper;
 import entity.Match;
 import entity.mission;
 import entity.user;
@@ -54,6 +57,7 @@ public class TestSerilizationAndEncrypt {
 		attr_list.add("B");
 		attr_list.add("C");
 		attr_list.add("d");
+		attr_list.add("e");
 		int user_id = 3;
 		PrivateKey prik = ReVo_ABE.keyGen(serilizedPK, serilizedMission.getMasterKey(), attr_list, user_id);
 		
@@ -68,13 +72,45 @@ public class TestSerilizationAndEncrypt {
 		List<String> attributes =Arrays.asList("a, b, c, d, e".split(","));
 		user us = new user(username, password, firstname, lastname, attributes);
 		conn.insertUser(us);
-		
+		user serilizedUser = conn.searchUser(username);
 		int userCountForMission = conn.getUsersForMission(serilizedMission.getMissionName()).size();
-		Match curMatch = new Match(curMission,us,userCountForMission+1);
+
+		Match curMatch = new Match(serilizedMission,serilizedUser,userCountForMission+1,true);
 		conn.insertMatch(curMatch);
 		
 		Match serilizedMatch = conn.searchMatch(curMission.getMissionName(), us.getUsername());
-		//PrivateKey prik = serilizedMatch
+		PublicKey ssPK = serilizedMatch.getMission().getPublicKey();
+		PrivateKey serilizedPrivateKey = serilizedMatch.getPrivateKey();
+		byte[] res = ReVo_ABE.decrypt(pairing, ssPK, ct,serilizedPrivateKey);
+		decoded = new String(res);
+		System.out.println("Try to decode with Serilized private key and serilized public key");
+		System.out.println(decoded);
+		
+		byte[] publicKey = serilizedMatch.getMission().toPublicKeyByteArray();
+		byte[] privateKey = serilizedMatch.toPrivateKeyByteArray();
+		ByteArrayOutputStream bs = new ByteArrayOutputStream();
+		try {
+			bs.write(EntityHelper.int_to_bytes(publicKey.length));
+			bs.write(publicKey);
+			bs.write(EntityHelper.int_to_bytes(privateKey.length));
+			bs.write(privateKey);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		byte[] sres = bs.toByteArray();
+		PublicKey pkFromBytes = new PublicKey(publicKey, pairing);
+		PrivateKey prikFromBytes = new PrivateKey(privateKey,pairing);
+		byte[] res2 = ReVo_ABE.decrypt(pairing, pkFromBytes, ct,prikFromBytes);
+		decoded = new String(res2);
+		System.out.println("Try to decode with byte private key and byte public key");
+		System.out.println(decoded);
+		
+		
+		
+		
 	}
 
 }

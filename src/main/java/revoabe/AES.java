@@ -73,6 +73,7 @@ public class AES {
             
             sha = MessageDigest.getInstance("SHA-224");
             if(!Arrays.equals(VK,sha.digest(cat_msg))) {
+            	System.out.println("AES found verification not match");
             	return null;
             }
         	//System.out.println("verification succeed");
@@ -87,6 +88,7 @@ public class AES {
         {
             System.out.println("Error while decrypting: " + e.toString());
         }
+        System.out.println("Something wrong and return null for AES");
         return null;
     }
 }

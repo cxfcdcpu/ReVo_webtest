@@ -3,6 +3,7 @@ package entity;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -27,11 +28,11 @@ public class Match {
 	private List<String> revoNodeSizes;
 	private byte[] k_ys;
 	
-	public Match(mission m, user u, int treeID) {
+	public Match(mission m, user u, int treeID, boolean init) {
 		this.ms = m;
 		this.ur = u;
 		this.user_tree_id = treeID;
-		this.keyGen();
+		if(init)this.keyGen();
 	}
 	
 	public Match(mission m, user u, int treeID, PrivateKey pk) {
@@ -45,7 +46,9 @@ public class Match {
 	public void keyGen() {
 		PublicKey pk = this.ms.getPublicKey();
 		MasterKey mk = this.ms.getMasterKey();
-		this.assignPrivateKey(ReVo_ABE.keyGen(pk, mk, this.ur.getAttributes(), this.user_tree_id));
+	
+		this.assignPrivateKey(ReVo_ABE.keyGen(pk, mk, 
+				this.ur.getAttributes(), this.user_tree_id));
 	}
 	
 	public void setTimestamp(Timestamp ts) {
@@ -90,6 +93,9 @@ public class Match {
 		
 	}
 	
+	public mission getMission() {
+		return this.ms;
+	}
 	
 	public int getMissionID() {
 		return this.ms.getMissionID();
@@ -153,7 +159,11 @@ public class Match {
 	}
 	
 	public static List<String> stringToStringList(String str){
-		return Arrays.asList(str.split(","));
+		List<String> ret = new ArrayList<String>();
+		for(String s:str.split(",")) {
+			ret.add(s.trim());
+		}
+		return ret;
 	}
 	
 	public void printMatch() {
@@ -190,17 +200,49 @@ public class Match {
 		return os.toByteArray();		
 	}
 	
+	
+	
+	
+	
+	
+	
 	//	The following are privatekey format
 	//	List<String> attr_list; //List of attributes
 	//	Element L; //An element of the pairing group
 	//	HashMap<String,Element> k_i; //Map of valid attributes and element
 	//	HashMap<Integer,Element> k_y;//Map of valid memberID and element
 	//	Function to convert match key types to privatekey types
+	//	PrivateKey(List<String> al, HashMap<String,Element> ki, 
+	//			Element l, HashMap<Integer,Element> ky)
 	public PrivateKey getPrivateKey() {
+		HashMap<String,Element> k_i = new HashMap();
+		HashMap<Integer,Element> k_y = new HashMap();
+		Element l = ms.getPairing().getG2().newElementFromBytes(this.L);
+		int counter = 0;
+		int start = 0;
+		for(String attr:this.attributes) {
+			int curSize = Integer.parseInt(this.attrSizes.get(counter));
+			k_i.put(attr.trim(), ms.getPairing().getG1().newElementFromBytes(
+					Arrays.copyOfRange(this.k_is, start, start+curSize)));
+			start+=curSize;
+			counter+=1;
+		}
+		counter = 0;
+		start = 0;
+		for(String node:this.revoNodes) {
+			int nodeID = Integer.parseInt(node);
+			int curSize = Integer.parseInt(this.revoNodeSizes.get(counter));
+			k_y.put(nodeID, ms.getPairing().getG1().newElementFromBytes(
+					Arrays.copyOfRange(this.k_ys, start, start+curSize)));
+			start+=curSize;
+			counter+=1;
+		}
 		
 		
-		return null;
+		return new PrivateKey(this.attributes,k_i,l,k_y);
 	}
+	
+	
 
 	
 }

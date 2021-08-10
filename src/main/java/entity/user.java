@@ -97,7 +97,7 @@ public class user {
 	public String getAttributesString() {
 		StringBuilder sb = new StringBuilder();
 		for(String attr:attributes) {
-			sb.append(attr);
+			sb.append(attr.trim());
 			sb.append(",");
 		}
 		if (sb.length()<=0) {

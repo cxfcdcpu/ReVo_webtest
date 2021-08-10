@@ -38,7 +38,7 @@ public class TestInsertRow {
 		ms = connection.searchMission(ms.getMissionName());
 		us = connection.searchUser(us.getUsername());
 		
-		Match mc = new Match(ms, us, 1);
+		Match mc = new Match(ms, us, 1,true);
 		connection.insertMatch(mc);
 		
 	}

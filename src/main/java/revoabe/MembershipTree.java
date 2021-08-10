@@ -60,6 +60,7 @@ public class MembershipTree{
 	
 	private TreeNode createTreeNode(TreeNode parent, int y_i, boolean withSeed) {
 		byte[] rdBytes = new byte[4];
+		
 		rd.nextBytes(rdBytes);
 		Element currentRandom = this.group.getZr().newElementFromBytes(rdBytes);
 		Element curr = this.g1.powZn(currentRandom);
@@ -109,8 +110,8 @@ public class MembershipTree{
 			//return node;
 		}
 		else {
-			node.left = dfs(node,2*y_i,h-1);
-			node.right = dfs(node, 2*y_i+1,h-1);
+			node.left = dfs(node,2*y_i,h-1,withSeed);
+			node.right = dfs(node, 2*y_i+1,h-1,withSeed);
 			//return node; 
 		}
 		return node;

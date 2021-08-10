@@ -1,12 +1,14 @@
 package entity;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import it.unisa.dia.gas.plaf.jpbc.util.Arrays;
 
 public class EntityHelper {
 	public static byte[] int_to_bytes(int myI) {
@@ -18,35 +20,22 @@ public class EntityHelper {
 	}
 	
 	public static byte[] stringList_to_bytes(List<String> sl) {
-		int totalSize = 4;
-		
-		for(String s: sl) {
-			totalSize+=4;
-			totalSize+=s.getBytes().length;
+		byte[] valueByteArray = String.join(",", sl).getBytes();
+		ByteArrayOutputStream bs = new ByteArrayOutputStream();
+		try {
+			bs.write(int_to_bytes(valueByteArray.length));
+			bs.write(valueByteArray);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-		ByteBuffer bf = ByteBuffer.allocate(totalSize).order(ByteOrder.nativeOrder());
-		bf.putInt(totalSize);
-		for(String s: sl) {
-			byte[] sb = s.getBytes();
-			bf.putInt(sb.length);
-			bf.put(sb);
-		}
-		return bf.array();
+		return bs.toByteArray();
 	}
 	
 	public static List<String> bytes_to_stringList(byte[] sb){
-		int start = 0;
-		List<String> ret = new ArrayList<String>();
-		while(start < sb.length) {
-			int curStringSize = ByteBuffer.wrap(Arrays.copyOfRange(sb, start, start+4)).order(ByteOrder.nativeOrder()).getInt();
-			start+=4;
-			String curString = new String(Arrays.copyOfRange(sb, start, start+curStringSize), StandardCharsets.UTF_8);
-			start+=curStringSize;
-			ret.add(curString);
-		}
-		return ret;
-		
+		String curString = new String(sb, StandardCharsets.UTF_8);
+		return Arrays.asList(curString.split(","));
 	}
 	
 	public static void printStringList(List<String> sl) {

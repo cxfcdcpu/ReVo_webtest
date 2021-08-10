@@ -48,4 +48,10 @@ public interface DBConnection {
 	
 	public List<mission> getMissionsForUser(String userName);
 	
+	public int getMissionIDByName(String missionName);
+	
+	public int getMissionIDByCode(int missionCode);
+	
+	public int getUserIDByUsername(String userName);
+	
 }

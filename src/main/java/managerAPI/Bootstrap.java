@@ -71,6 +71,7 @@ public class Bootstrap extends HttpServlet {
 					byte[] publicKey = curMission.toPublicKeyByteArray();
 					byte[] privateKey = curMatch.toPrivateKeyByteArray();
 					ByteArrayOutputStream bs = new ByteArrayOutputStream();
+					
 					bs.write(EntityHelper.int_to_bytes(publicKey.length));
 					bs.write(publicKey);
 					bs.write(EntityHelper.int_to_bytes(privateKey.length));

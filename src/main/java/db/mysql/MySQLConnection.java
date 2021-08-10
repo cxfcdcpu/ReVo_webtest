@@ -181,7 +181,7 @@ public class MySQLConnection implements DBConnection{
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(sql);
 				while(rs.next()) {
-					Match curMatch = new Match(curMission,curUser, rs.getInt("user_tree_id"));
+					Match curMatch = new Match(curMission,curUser, rs.getInt("user_tree_id"),false);
 					curMatch.assignPrivateKey(rs.getBytes("L"), 
 							rs.getString("attributes"), rs.getString("attrSizes"), 
 							rs.getBytes("k_is"), rs.getString("revoNodes"),
@@ -460,10 +460,15 @@ public class MySQLConnection implements DBConnection{
 		return false;
 	}
 
+	
+	
+	
 	@Override
 	public List<user> getUsersForMission(String missionName) {
 		
-		String sql = "SELECT userID FROM `match` WHERE missionID=;";
+		int missionID = getMissionIDByName(missionName);
+		if(missionID==-1)return null;
+		String sql = "SELECT userID FROM `match` WHERE missionID="+missionID+";";
 		List<user> res = new ArrayList<user>();
 		try {
 			Statement stmt = conn.createStatement();
@@ -483,6 +488,63 @@ public class MySQLConnection implements DBConnection{
 	public List<mission> getMissionsForUser(String userName) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int getMissionIDByName(String missionName) {
+		String sql = "SELECT missionID FROM mission WHERE missionName = '"+missionName+"';";
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				
+				return rs.getInt("missionID");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return -1;
+	}
+
+	@Override
+	public int getMissionIDByCode(int missionCode) {
+		String sql = "SELECT missionID FROM mission WHERE missionCode = '"+missionCode+"';";
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				
+				return rs.getInt("missionID");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return -1;
+	}
+
+	@Override
+	public int getUserIDByUsername(String userName) {
+		String sql = "SELECT userID FROM user WHERE username = '"+userName+"';";
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				
+				return rs.getInt("userID");
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return -1;
 	}
 
 

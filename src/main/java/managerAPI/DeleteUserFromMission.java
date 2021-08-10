@@ -50,7 +50,7 @@ public class DeleteUserFromMission extends HttpServlet {
 				
 				if (curMission != null && curUser != null) {
 					
-					Match mc = new Match(curMission, curUser, 3);
+					Match mc = new Match(curMission, curUser, 3,false);
 					conn.deleteMatch(mc);
 					System.out.println("Delete match successfully");
 					response.sendError(200);

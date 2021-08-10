@@ -50,8 +50,8 @@ public class AddUserToMission extends HttpServlet {
 				user curUser = conn.searchUser(userName);
 				
 				if (curMission != null && curUser != null) {
-					
-					Match mc = new Match(curMission, curUser, 3);
+					int matchUserCount = conn.getUsersForMission(missionName).size();
+					Match mc = new Match(curMission, curUser, matchUserCount+1,true);
 					conn.insertMatch(mc);
 					System.out.println("add match successfully");
 					response.sendError(200);

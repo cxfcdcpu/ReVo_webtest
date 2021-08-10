@@ -28,14 +28,20 @@ public class mission {
 	private byte e_gg_alpha[];
 	private byte g1_a[];
 	private int missionID;
-	private String curveFileDir;
+	private Pairing pairing;
 	
 	public mission(String missionName, int capacity) {
 		this.missionName = missionName;
 		this.capacity = capacity;
-		
 		this.randomMissionCode();
 		this.revo_ABE_setup();
+	}
+	
+	public mission(String missionName, int capacity, Pairing pair) {
+		this.missionName = missionName;
+		this.capacity = capacity;
+		this.randomMissionCode();
+		this.revo_ABE_setup(pair);
 	}
 	
 	public mission(String missionName, int capacity, String missionCode) {
@@ -54,19 +60,42 @@ public class mission {
 		this.revo_ABE_setup();
 	}
 	
+	public mission(String missionName, int capacity, String missionCode, Pairing pair) {
+		this.missionName = missionName;
+		this.capacity = capacity;
+		this.missionCode = missionCode;
+		this.revo_ABE_setup(pair);
+	}
+	
+	public mission(String missionName, int capacity, Timestamp startTime, Timestamp endTime, Pairing pair) {
+		this.missionName = missionName;
+		this.capacity = capacity;
+		this.randomMissionCode();
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.revo_ABE_setup(pair);
+	}
+	
 	//TO-DO, need to modify this to be a more gernetic function take curver property file dir as the input. 
 	public void revo_ABE_setup() {
-		this.curveFileDir = ReVo_ABE.hardcodedCurveFileDir("a.properties");
-		
-		Pairing pairing = PairingFactory.getPairing(this.curveFileDir);
-		PairingFactory.getInstance().setUsePBCWhenPossible(true);
+		this.pairing = getPairing();
 		ReVo_ABE testABE = new ReVo_ABE(pairing, this.capacity,Long.parseLong(missionCode));
-		MasterKey mk = testABE.getMasterKey();
-		PublicKey pk = testABE.getPublicKey();
 		this.setupKeysFromReVo(testABE);
 	}
 	
-
+	public void revo_ABE_setup(Pairing pair) {
+		this.pairing = pair;
+		ReVo_ABE testABE = new ReVo_ABE(pairing, this.capacity,Long.parseLong(missionCode));
+		this.setupKeysFromReVo(testABE);
+	}
+	
+	public static Pairing getPairing() {
+		String curveFileDir = ReVo_ABE.hardcodedCurveFileDir("a.properties");
+		
+		Pairing pairing = PairingFactory.getPairing(curveFileDir);
+		PairingFactory.getInstance().setUsePBCWhenPossible(true);
+		return pairing;
+	}
 	
 	
 	public void randomMissionCode() {
@@ -182,27 +211,29 @@ public class mission {
 
 	
 	public MasterKey getMasterKey() {
-		Pairing group = PairingFactory.getPairing(this.curveFileDir);
+		Pairing group = getPairing();
 		return new MasterKey(group.getG1().newElementFromBytes(this.g1_alpha).getImmutable(), group.getZr().newElementFromBytes(beta).getImmutable());
 	}
 	
 	public PublicKey getPublicKey() {
-		Pairing group = PairingFactory.getPairing(this.curveFileDir);
+		Pairing group = getPairing();
 		Element gg1 = group.getG1().newElementFromBytes(this.g1).getImmutable();
 		Element gg2 = group.getG2().newElementFromBytes(this.g2).getImmutable();
 		Element gg1_a = group.getG1().newElementFromBytes(this.g1_a).getImmutable();
 		Element gg2_beta = group.getG2().newElementFromBytes(this.g2_beta).getImmutable();
 		Element egg_a = group.getGT().newElementFromBytes(this.e_gg_alpha).getImmutable();
-		return new PublicKey(this.getMembershipTree(),gg1 , gg2, gg2_beta, egg_a, gg1_a);
+		MembershipTree mt = this.getMembershipTree();
+		
+		return new PublicKey(mt,gg1 , gg2, gg2_beta, egg_a, gg1_a);
 		
 	}
 	
 	public MembershipTree	getMembershipTree() {
-		Pairing group = PairingFactory.getPairing(this.curveFileDir);
+		Pairing group = getPairing();
 		return new MembershipTree(this.capacity,group.getG1().newElementFromBytes(this.g1).getImmutable(),group,Long.parseLong(missionCode));
 	}
 	
-	
+
 	public byte[] toPublicKeyByteArray() {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		try {
@@ -216,6 +247,10 @@ public class mission {
 			os.write(g2_beta);
 			os.write(EntityHelper.int_to_bytes(e_gg_alpha.length));
 			os.write(e_gg_alpha);
+			os.write(EntityHelper.int_to_bytes(capacity));
+			os.write(EntityHelper.int_to_bytes(Integer.parseInt(missionCode)));
+			
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
