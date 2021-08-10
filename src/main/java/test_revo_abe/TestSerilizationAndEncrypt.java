@@ -44,8 +44,19 @@ public class TestSerilizationAndEncrypt {
 		mission curMission = new mission("test serialization mission"+missionCount, 10,startTime, endTime);
 		
 		conn.insertMission(curMission);
-		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		mission serilizedMission = conn.searchMission(curMission.getMissionName());
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		byte[] needToEncrypt = "It supposed to be secure".getBytes();
 		List<Integer> RL = new ArrayList<Integer>();
 		RL.add(7);
@@ -72,12 +83,31 @@ public class TestSerilizationAndEncrypt {
 		List<String> attributes =Arrays.asList("a, b, c, d, e".split(","));
 		user us = new user(username, password, firstname, lastname, attributes);
 		conn.insertUser(us);
+		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		user serilizedUser = conn.searchUser(username);
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		int userCountForMission = conn.getUsersForMission(serilizedMission.getMissionName()).size();
 
 		Match curMatch = new Match(serilizedMission,serilizedUser,userCountForMission+1,true);
 		conn.insertMatch(curMatch);
-		
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		Match serilizedMatch = conn.searchMatch(curMission.getMissionName(), us.getUsername());
 		PublicKey ssPK = serilizedMatch.getMission().getPublicKey();
 		PrivateKey serilizedPrivateKey = serilizedMatch.getPrivateKey();
@@ -108,7 +138,21 @@ public class TestSerilizationAndEncrypt {
 		System.out.println("Try to decode with byte private key and byte public key");
 		System.out.println(decoded);
 		
+		byte[] ctBytes = ct.toByteArray();
+		Ciphertext ctFromBytes = new Ciphertext(ctBytes,pairing);
 		
+		if(ct.compareCiphertext(ctFromBytes)) {
+			System.out.println("serilized ciphertext are the same");
+		}
+		else {
+			System.out.println("They are different");
+		}
+		
+		
+		byte[] res3 = ReVo_ABE.decrypt(pairing, pkFromBytes, ctFromBytes,prikFromBytes);
+		decoded = new String(res3);
+		System.out.println("Try to decode byte ciphertext with byte private key and byte public key");
+		System.out.println(decoded);
 		
 		
 	}

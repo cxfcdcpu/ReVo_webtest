@@ -14,6 +14,8 @@ public interface DBConnection {
 	
 	public user searchUser(String username);
 	
+	public user searchUser(int userID);
+	
 	public List<MissionInfo> getAllMissions();
 	
 	public List<user> getAllUsers();

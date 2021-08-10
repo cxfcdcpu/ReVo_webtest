@@ -60,11 +60,11 @@ public class PublicKey{
 		int capacity = bf.getInt();
 		bf = ByteBuffer.wrap(pkInBytes, end_egg+4, 4).order(ByteOrder.nativeOrder());
 		int seed = bf.getInt();
-		this.g1 = pair.getG1().newElementFromBytes(Arrays.copyOfRange(pkInBytes, start_g1, end_g1));
-		this.g2 = pair.getG2().newElementFromBytes(Arrays.copyOfRange(pkInBytes, start_g2, end_g2));
-		this.g1_a = pair.getG1().newElementFromBytes(Arrays.copyOfRange(pkInBytes, start_g1_a, end_g1_a));
-		this.g2_beta = pair.getG2().newElementFromBytes(Arrays.copyOfRange(pkInBytes, start_g2_beta, end_g2_beta));
-		this.e_gg_alpha = pair.getGT().newElementFromBytes(Arrays.copyOfRange(pkInBytes, start_egg, end_egg));
+		this.g1 = pair.getG1().newElementFromBytes(Arrays.copyOfRange(pkInBytes, start_g1, end_g1)).getImmutable();
+		this.g2 = pair.getG2().newElementFromBytes(Arrays.copyOfRange(pkInBytes, start_g2, end_g2)).getImmutable();
+		this.g1_a = pair.getG1().newElementFromBytes(Arrays.copyOfRange(pkInBytes, start_g1_a, end_g1_a)).getImmutable();
+		this.g2_beta = pair.getG2().newElementFromBytes(Arrays.copyOfRange(pkInBytes, start_g2_beta, end_g2_beta)).getImmutable();
+		this.e_gg_alpha = pair.getGT().newElementFromBytes(Arrays.copyOfRange(pkInBytes, start_egg, end_egg)).getImmutable();
 		this.membership_tree = new MembershipTree(capacity, g1, pair, seed);
 	}
 	

@@ -224,6 +224,34 @@ public class MySQLConnection implements DBConnection{
 		return null;
 	}
 	
+
+	@Override
+	public user searchUser(int userID) {
+		// TODO Auto-generated method stub
+		String sql = "SELECT * FROM user WHERE userID = '"+userID+"';";
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				user curUser = new user(rs.getString("username"),rs.getString("password")
+						);
+				curUser.setAttributes(rs.getString("attributes"));
+				curUser.setUserID(rs.getInt("userID"));
+				curUser.setFirstname(rs.getString("firstname"));
+				curUser.setLastname(rs.getString("lastname"));
+				curUser.setRegisterTime(rs.getTimestamp("registerTime"));
+				return curUser;
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	
 	@Override
 	public mission searchMission(String missionName) {
 		// TODO Auto-generated method stub
@@ -474,7 +502,7 @@ public class MySQLConnection implements DBConnection{
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
-				res.add(new user(rs.getString("username"),rs.getString("firstname"),rs.getString("lastname")));
+				res.add(this.searchUser(rs.getInt("userID")));
 			}
 			
 		} catch(SQLException e) {
@@ -483,6 +511,8 @@ public class MySQLConnection implements DBConnection{
 		
 		return res;
 	}
+
+
 
 	@Override
 	public List<mission> getMissionsForUser(String userName) {
