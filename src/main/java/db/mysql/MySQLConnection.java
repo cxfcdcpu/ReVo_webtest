@@ -99,8 +99,8 @@ public class MySQLConnection implements DBConnection{
 	public boolean insertUser(user us) {
 		
 
-		String sql = "INSERT INTO user (username,password,attributes,firstname,lastname)"
-				+ "VALUES (?,?,?,?,?);";
+		String sql = "INSERT INTO user (username,password,attributes,firstname,lastname,expirationDate)"
+				+ "VALUES (?,?,?,?,?,?);";
 		try {
 			
 			user curUser = searchUser(us.getUsername());
@@ -111,6 +111,7 @@ public class MySQLConnection implements DBConnection{
 				stmt.setString(3, us.getAttributesString());
 				stmt.setString(4, us.getFirstname());
 				stmt.setString(5, us.getLastname());
+				stmt.setTimestamp(6, us.getExpirationDate());
 				stmt.executeUpdate();
 				return true;
 			}
@@ -141,7 +142,7 @@ public class MySQLConnection implements DBConnection{
 				PreparedStatement stmt = conn.prepareStatement(sql);
 				stmt.setString(1, ms.getMissionName());
 				stmt.setString(2, ms.getMissionCode());
-				stmt.setTimestamp(3, ms.getEndTime());
+				stmt.setTimestamp(3, ms.getStartTime());
 				stmt.setTimestamp(4, ms.getEndTime());
 				stmt.setInt(5, ms.getCapacity());
 				stmt.setBytes(6, ms.getG1_alpha());
@@ -213,6 +214,7 @@ public class MySQLConnection implements DBConnection{
 				curUser.setFirstname(rs.getString("firstname"));
 				curUser.setLastname(rs.getString("lastname"));
 				curUser.setRegisterTime(rs.getTimestamp("registerTime"));
+				curUser.setExpirationDate(rs.getTimestamp("expirationDate"));
 				return curUser;
 			}
 			
@@ -240,6 +242,7 @@ public class MySQLConnection implements DBConnection{
 				curUser.setFirstname(rs.getString("firstname"));
 				curUser.setLastname(rs.getString("lastname"));
 				curUser.setRegisterTime(rs.getTimestamp("registerTime"));
+				curUser.setExpirationDate(rs.getTimestamp("expirationDate"));
 				return curUser;
 			}
 			
@@ -296,7 +299,8 @@ public class MySQLConnection implements DBConnection{
 				curMission.setMissionCode(rs.getString("missionCode"));
 				curMission.setStartTime(rs.getTimestamp("startTime"));
 				curMission.setEndTime(rs.getTimestamp("endTime"));
-				curMission.setupPublicKey(rs.getBytes("g1"), rs.getBytes("g2"), rs.getBytes("g2_beta"), rs.getBytes("g1_a"), rs.getBytes("e_gg_alpha"));
+				curMission.setupPublicKey(rs.getBytes("g1"), rs.getBytes("g2"), 
+						rs.getBytes("g2_beta"), rs.getBytes("g1_a"), rs.getBytes("e_gg_alpha"));
 				curMission.setupMasterKey(rs.getBytes("beta"),rs.getBytes("g1_alpha"));
 				return curMission;
 			}
@@ -397,7 +401,7 @@ public class MySQLConnection implements DBConnection{
 	@Override
 	public boolean updateUser(user us) {
 		String sql = "UPDATE user SET username = ?, password = ?,"
-					+" attributes = ?, firstname = ?, lastname = ?"
+					+" attributes = ?, firstname = ?, lastname = ?, expirationDate = ?"
 					+"WHERE userID= ?;";
 				
 		try {
@@ -408,7 +412,8 @@ public class MySQLConnection implements DBConnection{
 			stmt.setString(3, us.getAttributesString());
 			stmt.setString(4, us.getFirstname());
 			stmt.setString(5, us.getLastname());
-			stmt.setInt(6, us.getUserID());
+			stmt.setTimestamp(6, us.getExpirationDate());
+			stmt.setInt(7, us.getUserID());
 			stmt.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -433,7 +438,7 @@ public class MySQLConnection implements DBConnection{
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, ms.getMissionName());
 			stmt.setString(2, ms.getMissionCode());
-			stmt.setTimestamp(3, ms.getEndTime());
+			stmt.setTimestamp(3, ms.getStartTime());
 			stmt.setTimestamp(4, ms.getEndTime());
 			stmt.setInt(5, ms.getCapacity());
 			stmt.setBytes(6, ms.getG1_alpha());

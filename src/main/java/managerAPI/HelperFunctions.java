@@ -18,6 +18,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 public class HelperFunctions {
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static JSONObject readJsonObject(HttpServletRequest request) {
 		StringBuilder sb = new StringBuilder();
 		try {
@@ -89,5 +98,15 @@ public class HelperFunctions {
 		return Arrays.asList(str.split(","));
 	}
 
+	public static String getFieldFromJsonRequest(String field,JSONObject input) {
+		String res = "";
+		try {
+			res = input.getString(field).trim();
+		}catch(Exception e){
+			System.out.println("Field: "+field+" is not exists");
+			
+		}
+		return res;
+	}
 	
 }

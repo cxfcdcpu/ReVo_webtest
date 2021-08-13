@@ -3,6 +3,7 @@ package managerAPI;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -42,10 +43,17 @@ public class UpdateMission extends HttpServlet {
 				String missionName = input.getString("OldMissionName").trim();
 				String newMissionName = input.getString("NewMissionName").trim();
 				int capacity = input.getInt("capacity");
-				String startTime = input.getString("startTime").trim();
-				String endTime = input.getString("endTime").trim();
-				Timestamp ts_startTime = HelperFunctions.convertStringToTimestamp(startTime);
-				Timestamp ts_endTime = HelperFunctions.convertStringToTimestamp(endTime);
+				String startTime = HelperFunctions.getFieldFromJsonRequest("startTime", input);
+				String endTime = HelperFunctions.getFieldFromJsonRequest("endTime", input);
+				
+				Date localTime = new Date();
+				Timestamp ts_startTime = startTime.length()>10? 
+						HelperFunctions.convertStringToTimestamp(startTime)
+						:new Timestamp(localTime.getTime());
+				Timestamp ts_endTime = endTime.length()>10? 
+						HelperFunctions.convertStringToTimestamp(endTime)
+						:new Timestamp(localTime.getTime()+ConstantForServer.DEFAULT_EXPIRATION_DURATION);
+				
 				System.out.println(String.format("%s,%d,%s,%s",missionName,capacity,startTime,endTime));
 				
 				mission curMission = new mission(newMissionName,capacity,ts_startTime,ts_endTime);

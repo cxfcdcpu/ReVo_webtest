@@ -12,7 +12,7 @@ public class user {
 	private String firstname;
 	private String lastname;
 	private Timestamp registerationTime;
-	
+	private Timestamp expirationDate;
 	private int userID;
 	
 	public user(String un, String pw) {
@@ -73,6 +73,17 @@ public class user {
 		this.registerationTime = ts;
 	}
 	
+	public void setExpirationDate(Timestamp ts) {
+		this.expirationDate = ts;
+	}
+	
+	public Timestamp getExpirationDate() {
+		return this.expirationDate;
+	}
+	
+	public Timestamp getRegisterTime() {
+		return this.expirationDate;
+	}
 	
 	public String getHashedPassword() {
 		return this.password;

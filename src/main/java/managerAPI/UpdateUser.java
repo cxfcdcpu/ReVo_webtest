@@ -3,6 +3,7 @@ package managerAPI;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -44,8 +45,9 @@ public class UpdateUser extends HttpServlet {
 				String newUserName = input.getString("NewUserName").trim();
 				String password = input.getString("password").trim();
 				String attributes = input.getString("attributes").trim();
-				String firstname = input.getString("firstname").trim();
-				String lastname = input.getString("lastname").trim();
+				String firstname = HelperFunctions.getFieldFromJsonRequest("firstname", input);
+				String lastname = HelperFunctions.getFieldFromJsonRequest("lastname", input);
+				String exp = HelperFunctions.getFieldFromJsonRequest("expirationDate", input);
 				System.out.println(String.format("%s,%s,%s",oldUserName,newUserName,password));
 				
 				user curUser = new user(newUserName, password, firstname, lastname, HelperFunctions.stringToStringList(attributes));
@@ -62,7 +64,11 @@ public class UpdateUser extends HttpServlet {
 					existingUser.setFirstname(firstname);
 					existingUser.setLastname(lastname);
 					existingUser.setAttributes(attributes);
-					
+					Date localTime = new Date();
+					Timestamp expTimestamp = exp.length()>10? 
+							HelperFunctions.convertStringToTimestamp(exp)
+							:new Timestamp(localTime.getTime()+ConstantForServer.DEFAULT_EXPIRATION_DURATION);
+					existingUser.setExpirationDate(expTimestamp);
 					conn.updateUser(existingUser);
 					System.out.println("user update successfully");
 					response.sendError(200);
