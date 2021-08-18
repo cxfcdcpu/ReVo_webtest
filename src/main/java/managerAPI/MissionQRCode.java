@@ -47,6 +47,7 @@ public class MissionQRCode extends HttpServlet {
 			
 				//--Send the data to response
 				response.setContentType("image/jpeg");
+				response.addHeader("Access-Control-Allow-Origin", "*");
 				System.out.println("OK");
 
 				ImageIO.write(bi, "jpg", os);

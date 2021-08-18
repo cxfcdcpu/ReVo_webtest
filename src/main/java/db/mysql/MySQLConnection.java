@@ -321,7 +321,7 @@ public class MySQLConnection implements DBConnection{
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
-				res.add(new MissionInfo(rs.getString("missionName"),rs.getString("missionCode"),rs.getInt("capacity")));
+				res.add(new MissionInfo(rs.getString("missionName"),rs.getString("missionCode"),rs.getInt("capacity"),rs.getString("startTime"),rs.getString("endTime")));
 			}
 			
 		} catch(SQLException e) {
