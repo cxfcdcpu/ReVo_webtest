@@ -38,7 +38,9 @@ public class Users extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		DBConnection conn = DBConnectionFactory.getConnection();	
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+				.create();
 		System.out.println("create gson successfully");
 		try {
 			List<user> curUsers = conn.getAllUsers();

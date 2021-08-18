@@ -41,7 +41,9 @@ public class GetUsersOfAMission extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DBConnection conn = DBConnectionFactory.getConnection();
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+				.create();
 		try {
 			JSONObject input = HelperFunctions.readJsonObject(request);
 			String missionName = input.getString("missionName").trim();

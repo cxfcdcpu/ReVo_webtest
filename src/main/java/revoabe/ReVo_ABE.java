@@ -251,11 +251,18 @@ public class ReVo_ABE {
 			System.out.println("This user is in the revocation list.");
 			return null;
 		}
+		if (common_y_i.toArray()==null || common_y_i.toArray().length==0) {
+			return "all nodes are revoked".getBytes();
+		}
 		int y_i = (int) common_y_i.toArray()[0];
 		
 		Element P = this.group.pairing(key.k_y.get(y_i), ctxt.C_prime).getImmutable();
 		Element Q = this.group.pairing(ctxt.C_y.get(y_i), pk.g2).getImmutable();
 		
+		
+		if(key.attr_list==null || key.attr_list.size()==0) {
+			return "attributes not exists".getBytes();
+		}
 		List<BinNode> nodes = MSP_Builder.prune(ctxt.policy, key.attr_list);
 		if (nodes == null) {
 			System.out.println("Policy not satisfied.");

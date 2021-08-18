@@ -47,7 +47,7 @@ public class HelperFunctions {
 	
 	public static Timestamp convertStringToTimestamp(String strDate) {
 	    try {
-	      DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+	      DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	       // you can change format of date
 	      Date date = formatter.parse(strDate);
 	      Timestamp timeStampDate = new Timestamp(date.getTime());

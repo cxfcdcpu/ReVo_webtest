@@ -43,7 +43,9 @@ public class Missions extends HttpServlet {
 		// TODO Auto-generated method stub
 		//OutputStream os = response.getOutputStream();
 		DBConnection conn = DBConnectionFactory.getConnection();	
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+				.create();
 		System.out.println("create gson successfully");
 		try {
 			List<MissionInfo> curMission = conn.getAllMissions();

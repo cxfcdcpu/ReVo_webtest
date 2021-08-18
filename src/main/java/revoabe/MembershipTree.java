@@ -52,8 +52,8 @@ public class MembershipTree{
 	
 	
 	private TreeNode createTreeNode(TreeNode parent, int y_i) {
-		Element currentRandom = this.group.getZr().newRandomElement();
-		Element curr = this.g1.powZn(currentRandom);
+		Element currentRandom = this.group.getZr().newRandomElement().getImmutable();
+		Element curr = this.g1.powZn(currentRandom).getImmutable();
 		TreeNode node = new TreeNode(y_i,curr ,parent);
 		return node;
 	}
@@ -62,8 +62,8 @@ public class MembershipTree{
 		byte[] rdBytes = new byte[4];
 		
 		rd.nextBytes(rdBytes);
-		Element currentRandom = this.group.getZr().newElementFromBytes(rdBytes);
-		Element curr = this.g1.powZn(currentRandom);
+		Element currentRandom = this.group.getZr().newElementFromBytes(rdBytes).getImmutable();
+		Element curr = this.g1.powZn(currentRandom).getImmutable();
 		TreeNode node = new TreeNode(y_i,curr ,parent);
 		return node;
 	}

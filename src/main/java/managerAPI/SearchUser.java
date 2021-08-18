@@ -39,7 +39,9 @@ public class SearchUser extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DBConnection conn = DBConnectionFactory.getConnection();
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+				.create();
 		try {
 			JSONObject input = HelperFunctions.readJsonObject(request);
 			String username = input.getString("username").trim();
@@ -47,7 +49,7 @@ public class SearchUser extends HttpServlet {
 			System.out.println(String.format("Find user by username %s",username));
 			
 			user curUser = conn.searchUser(username);
-			
+			//TO-DO, add password verification.
 			if (curUser != null) {
 				
 				System.out.println("Get user  successfully: ");

@@ -82,7 +82,7 @@ public class user {
 	}
 	
 	public Timestamp getRegisterTime() {
-		return this.expirationDate;
+		return this.registerationTime;
 	}
 	
 	public String getHashedPassword() {
