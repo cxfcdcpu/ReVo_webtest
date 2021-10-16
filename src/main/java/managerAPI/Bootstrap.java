@@ -53,6 +53,7 @@ public class Bootstrap extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		response.addHeader("Access-Control-Allow-Origin", "*");
 		OutputStream os = response.getOutputStream();
 		DBConnection conn = DBConnectionFactory.getConnection();
 		try {

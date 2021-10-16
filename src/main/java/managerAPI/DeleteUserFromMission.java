@@ -36,6 +36,7 @@ public class DeleteUserFromMission extends HttpServlet {
 	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.addHeader("Access-Control-Allow-Origin", "*");
 		OutputStream os = response.getOutputStream();
 		DBConnection conn = DBConnectionFactory.getConnection();
 		try {

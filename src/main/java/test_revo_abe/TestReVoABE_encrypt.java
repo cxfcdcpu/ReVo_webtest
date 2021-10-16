@@ -46,12 +46,12 @@ public class TestReVoABE_encrypt {
 		//pk.printPublicKey();
 		//pk.printPublicKey();
 		List<Integer> RL = new ArrayList<Integer>();
-		RL.add(6);
+
 		
 		String msg = "This suppose to be secret,";
 		//System.out.println(msg);
 		
-		Ciphertext ctxt = testABE.encrypt(pk, msg.getBytes(), "(a and b) or (b and c)", RL);
+		Ciphertext ctxt = testABE.encrypt(pk, msg.getBytes(), "a", RL);
 		System.out.println(new String(testABE.decrypt(pk, ctxt, prik6)));
 	}
 	

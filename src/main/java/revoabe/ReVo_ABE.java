@@ -249,7 +249,7 @@ public class ReVo_ABE {
 		Set<Integer> common_y_i = Ky.keySet();
 		if (!common_y_i.retainAll(ctxt.C_y.keySet())) {
 			System.out.println("This user is in the revocation list.");
-			return null;
+			return "This user is in the revocation list.".getBytes();
 		}
 		if (common_y_i.toArray()==null || common_y_i.toArray().length==0) {
 			return "all nodes are revoked".getBytes();
@@ -266,7 +266,7 @@ public class ReVo_ABE {
 		List<BinNode> nodes = MSP_Builder.prune(ctxt.policy, key.attr_list);
 		if (nodes == null) {
 			System.out.println("Policy not satisfied.");
-			return null;
+			return "Policy not satisfied.".getBytes();
 		}
 		
 		Element prodC_i = null;
@@ -298,7 +298,7 @@ public class ReVo_ABE {
 		Set<Integer> common_y_i = Ky.keySet();
 		if (!common_y_i.retainAll(ctxt.C_y.keySet())) {
 			System.out.println("This user is in the revocation list.");
-			return null;
+			return "This user is in the revocation list.".getBytes();
 		}
 		int y_i = (int) common_y_i.toArray()[0];
 		
@@ -306,9 +306,9 @@ public class ReVo_ABE {
 		Element Q = pair.pairing(ctxt.C_y.get(y_i), pk.g2).getImmutable();
 		
 		List<BinNode> nodes = MSP_Builder.prune(ctxt.policy, key.attr_list);
-		if (nodes == null) {
+		if (nodes == null || nodes.size()==0) {
 			System.out.println("Policy not satisfied.");
-			return null;
+			return "Policy not satisfied.".getBytes();
 		}
 		
 		Element prodC_i = null;
@@ -326,6 +326,7 @@ public class ReVo_ABE {
 			else
 				prodK_i = prodK_i.mul(key.k_i.get(attr_stripped));
 		}
+
 		
 		Element W = P.div((Q.mul(pair.pairing(prodC_i, key.L)).mul(pair.pairing(prodK_i, ctxt.D))));
 		Element seed = ctxt.C.div(W);

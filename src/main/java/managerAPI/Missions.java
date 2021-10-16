@@ -40,8 +40,7 @@ public class Missions extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//OutputStream os = response.getOutputStream();
+		//response.addHeader("Access-Control-Allow-Origin", "*");
 		DBConnection conn = DBConnectionFactory.getConnection();	
 		Gson gson = new GsonBuilder()
 				.setDateFormat("yyyy-MM-dd HH:mm:ss.SSS")

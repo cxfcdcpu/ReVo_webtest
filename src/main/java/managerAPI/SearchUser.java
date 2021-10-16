@@ -38,6 +38,7 @@ public class SearchUser extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//response.addHeader("Access-Control-Allow-Origin", "*");
 		DBConnection conn = DBConnectionFactory.getConnection();
 		Gson gson = new GsonBuilder()
 				.setDateFormat("yyyy-MM-dd HH:mm:ss.SSS")

@@ -95,6 +95,7 @@ public class AddUser extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.addHeader("Access-Control-Allow-Origin", "*");
 		OutputStream os = response.getOutputStream();
 		DBConnection conn = DBConnectionFactory.getConnection();
 		try {
