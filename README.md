@@ -42,6 +42,19 @@ The backend is developed in Ubuntu but could also be able to run in Windows.
  ![setup buildpath](https://github.com/cxfcdcpu/ReVo_webtest/blob/main/buildPath.png)
  
  
+### Windows and MacOS environment setup:
+The only difference of windows and Mac system is the SQL database installation and LAMP server setup. In Windows and MacOS, we use MAMP. To install MAMP follow the following links:
+https://www.mamp.info/en/downloads/
+
+Instructions:
+#### Windows:
+https://documentation.mamp.info/en/MAMP-Windows/Installation/
+
+#### MacOS:
+https://documentation.mamp.info/en/MAMP-Mac/Installation/
+
+
+ 
 ## Use the API:
 The API has two parts, the RestFul API that manage mission, User, and Match which resides in manageAPI package and the attribute based encryption API which resides in revoabe package. The structure of the project are as follows:
 ![structure](https://github.com/cxfcdcpu/ReVo_webtest/blob/main/structure.png)
