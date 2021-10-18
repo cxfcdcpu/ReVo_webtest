@@ -1,5 +1,8 @@
 # ReVo_webtest
 
+This is the backend of the central authority. The frontend is in another project:
+https://github.com/cxfcdcpu/secure_data_sharing_dashboard
+
 ## setup environment
 The backend is developed in Ubuntu but could also be able to run in Windows.
 
@@ -45,9 +48,27 @@ The API has two parts, the RestFul API that manage mission, User, and Match whic
 
 ### To use the manageAPI:
 All API are java servlet. To use the API, in eclipse, select server and run. Note your IP. To call the API check the report file. 
-
+https://github.com/cxfcdcpu/ReVo_webtest/blob/main/August_Report%20.docx
 
 ### To use the revo-ABE:
-revo-ABE is a powerful attribute based ecryption algorithm which is originally written in python using charm library. In this API, it is rewritten using java with JPBC and antlr library. The implementation is in the revoabe package. To use the library, user need to create a revo-abe instance first. 
+revo-ABE is a powerful attribute based ecryption algorithm which is originally written in python using charm library. In this API, it is rewritten using java with JPBC and antlr library. The implementation is in the revoabe package. To use the library, user need to create a revo-abe instance first. Then generate private key and public key for a user in the bootstrap stage. Then we can use the encryp and decrypt function to encrypt any byte array to ciphertext and decrypt any ciphertext to byte array. Both encrypt and decrypt function has static and non-static implementation as following. 
+![encryption](https://github.com/cxfcdcpu/ReVo_webtest/blob/main/encrypt.png)
+
+![decryption](https://github.com/cxfcdcpu/ReVo_webtest/blob/main/decrypt.png)
+(Note: pairing can be generated using JPBC pairing. The buildpath setup are shown in previous of this document)
+
+Also, the ciphertext can be generated from byte array and convert to byte array with the class function as follows:
+![totext](https://github.com/cxfcdcpu/ReVo_webtest/blob/main/toCipherText.png)
+
+![toarray](https://github.com/cxfcdcpu/ReVo_webtest/blob/main/toByteArray.png)
+
+To test the Revo-abe, just use the test code in:
+https://github.com/cxfcdcpu/ReVo_webtest/blob/main/src/main/java/test_revo_abe/TestReVoABE_encrypt.java
+
+![test](https://github.com/cxfcdcpu/ReVo_webtest/blob/main/testEncrypt.png)
+
+
+
+
  
  
